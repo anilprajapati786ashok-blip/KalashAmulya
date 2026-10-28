@@ -1,0 +1,244 @@
+@model KalashAmulya.Controllers.UserModel
+@{
+    ViewData["Title"] = "Customer Profile - Kalash Amulya";
+    Layout = "_Layout";
+    var orders = ViewBag.Orders as List<KalashAmulya.Controllers.CustomerOrder> ?? new List<KalashAmulya.Controllers.CustomerOrder>();
+}
+
+<div class="profile-page-wrapper">
+    <div class="content-container">
+        <!-- Profile Banner -->
+        <div class="profile-header-banner">
+            <div class="profile-avatar-initials">
+                @(string.IsNullOrWhiteSpace(Model.FullName) ? "KA" : string.Join("", Model.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Take(2).Select(s => s[0])))
+            </div>
+            <div class="profile-info-block">
+                <span class="member-tag">&#9733; AMULYA PRIVILEGE PATRON</span>
+                <h1 class="profile-user-name">@Model.FullName</h1>
+                <p class="profile-user-meta">
+                    <span>&#9993; @Model.Email</span> &bull; 
+                    <span>&#9742; @Model.Phone</span> &bull; 
+                    <span>&#128205; @Model.City, @Model.State</span>
+                </p>
+            </div>
+            <div class="profile-quick-actions">
+                <button type="button" class="btn-profile-cart" onclick="if(window.kalashOpenCart) window.kalashOpenCart();">
+                    <span>Active Bag (<span id="profileBagCount">0</span>)</span>
+                    <span class="btn-arrow">&rarr;</span>
+                </button>
+                <a href="/Account/Logout" class="btn-profile-logout" title="Sign Out">Sign Out</a>
+            </div>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="auth-alert auth-alert-success" role="alert">
+                <span class="alert-icon">&#10003;</span>
+                <span>@TempData["SuccessMessage"]</span>
+            </div>
+        }
+
+        <!-- Profile Tabs Layout -->
+        <div class="profile-layout-grid">
+            <!-- Left Tabs Navigation -->
+            <aside class="profile-sidebar-tabs">
+                <ul class="profile-tab-list" role="tablist">
+                    <li>
+                        <button type="button" class="tab-trigger active" data-tab="tab-orders">
+                            <span class="tab-icon">&#128230;</span>
+                            <span>My Orders &amp; Tracking</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="tab-trigger" data-tab="tab-address">
+                            <span class="tab-icon">&#128205;</span>
+                            <span>Default Delivery Address</span>
+                        </button>
+                    </li>
+                    <li>
+                        <button type="button" class="tab-trigger" data-tab="tab-details">
+                            <span class="tab-icon">&#9881;</span>
+                            <span>Personal Details</span>
+                        </button>
+                    </li>
+                    <li>
+                        <a href="/Account/Logout" class="tab-trigger tab-logout-link">
+                            <span class="tab-icon">&#128682;</span>
+                            <span>Sign Out</span>
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="profile-kanpur-perk-box">
+                    <span class="perk-badge">KANPUR LOCAL PRIVILEGE</span>
+                    <h4>Same-Day Local Delivery</h4>
+                    <p>Orders to Kanpur city pin codes (208001 - 208027) qualify for expedited courier dispatch from our Dada Nagar facility.</p>
+                </div>
+            </aside>
+
+            <!-- Right Tab Panels -->
+            <main class="profile-tab-content">
+                <!-- Tab 1: My Orders -->
+                <div class="tab-panel active" id="tab-orders">
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="panel-title">Order History &amp; Tracking</h2>
+                            <p class="panel-subtitle">Review previous shipments and track live transit from our Kanpur hub.</p>
+                        </div>
+                    </div>
+
+                    <div class="orders-cards-list">
+                        @foreach (var order in orders)
+                        {
+                            <div class="customer-order-card">
+                                <div class="order-top-bar">
+                                    <div class="order-id-group">
+                                        <span class="order-badge">VERIFIED SHIPMENT</span>
+                                        <h3 class="order-ref-num">@order.OrderNumber</h3>
+                                        <span class="order-date-text">Placed on @order.OrderDate</span>
+                                    </div>
+                                    <div class="order-status-pill @(order.Status.Contains("Out") ? "status-transit" : "status-delivered")">
+                                        <span class="dot-status"></span>
+                                        <span>@order.Status</span>
+                                    </div>
+                                </div>
+                                <div class="order-body">
+                                    <div class="order-items-desc">
+                                        <strong>Items:</strong> @order.ItemsSummary
+                                    </div>
+                                    <div class="order-shipping-dest">
+                                        <span class="dest-icon">&#128666;</span>
+                                        <span><strong>Destination:</strong> @order.DeliveryAddress</span>
+                                    </div>
+                                </div>
+                                <div class="order-footer-bar">
+                                    <div class="order-total-price">
+                                        <span>Total Amount:</span>
+                                        <strong>&#8377;@order.TotalAmount</strong>
+                                    </div>
+                                    <div class="order-actions">
+                                        <button type="button" class="btn-track-order" onclick="alert('Live Tracking for @order.OrderNumber: In transit via BlueDart / Express Kanpur Hub. Estimated delivery today by 6:00 PM.');">
+                                            Track Package &rarr;
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- Tab 2: Saved Address -->
+                <div class="tab-panel" id="tab-address" hidden>
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="panel-title">Default Delivery Address</h2>
+                            <p class="panel-subtitle">This address will be pre-filled during checkout for swift order placement.</p>
+                        </div>
+                    </div>
+
+                    <div class="saved-address-card">
+                        <div class="address-card-header">
+                            <span class="address-type-tag">PRIMARY RESIDENTIAL ADDRESS</span>
+                            <span class="address-check">&#10003; Default</span>
+                        </div>
+                        <h3 class="address-recipient">@Model.FullName</h3>
+                        <p class="address-full-line">@Model.Address</p>
+                        <p class="address-city-line">@Model.City, @Model.State - <strong>@Model.Pincode</strong></p>
+                        <p class="address-phone-line"><strong>Contact Phone:</strong> @Model.Phone</p>
+                        <div class="address-actions-bar">
+                            <button type="button" class="btn-edit-addr" onclick="document.querySelector('[data-tab=\'tab-details\']').click();">
+                                Edit Address Details &rarr;
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 3: Personal Details Form -->
+                <div class="tab-panel" id="tab-details" hidden>
+                    <div class="panel-header-row">
+                        <div>
+                            <h2 class="panel-title">Personal Details &amp; Address Settings</h2>
+                            <p class="panel-subtitle">Update your profile information and delivery coordinates.</p>
+                        </div>
+                    </div>
+
+                    <form method="post" action="/Account/UpdateProfile" class="profile-edit-form">
+                        @Html.AntiForgeryToken()
+                        <div class="form-row-two">
+                            <div class="form-group">
+                                <label for="profName">Full Name *</label>
+                                <input type="text" id="profName" name="fullName" value="@Model.FullName" required class="auth-input" />
+                            </div>
+                            <div class="form-group">
+                                <label for="profEmail">Registered Email (Read Only)</label>
+                                <input type="email" id="profEmail" value="@Model.Email" readonly class="auth-input readonly-input" />
+                            </div>
+                        </div>
+
+                        <div class="form-row-two">
+                            <div class="form-group">
+                                <label for="profPhone">Mobile Number *</label>
+                                <input type="tel" id="profPhone" name="phone" value="@Model.Phone" required class="auth-input" />
+                            </div>
+                            <div class="form-group">
+                                <label for="profPin">Postal PIN Code *</label>
+                                <input type="text" id="profPin" name="pincode" value="@Model.Pincode" required class="auth-input" />
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="profAddress">Delivery Street Address (House No., Building, Area) *</label>
+                            <textarea id="profAddress" name="address" rows="3" required class="auth-input">@Model.Address</textarea>
+                        </div>
+
+                        <div class="form-row-two">
+                            <div class="form-group">
+                                <label for="profCity">City *</label>
+                                <input type="text" id="profCity" name="city" value="@Model.City" required class="auth-input" />
+                            </div>
+                            <div class="form-group">
+                                <label for="profState">State *</label>
+                                <input type="text" id="profState" name="state" value="@Model.State" required class="auth-input" />
+                            </div>
+                        </div>
+
+                        <button type="submit" class="auth-submit-btn" style="width: auto; padding: 12px 32px;">
+                            <span>Save Profile Changes</span>
+                            <span class="btn-arrow">&rarr;</span>
+                        </button>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab switching logic for profile
+    document.addEventListener('DOMContentLoaded', function () {
+        const triggers = document.querySelectorAll('.tab-trigger[data-tab]');
+        triggers.forEach(t => {
+            t.addEventListener('click', function () {
+                triggers.forEach(x => x.classList.remove('active'));
+                t.classList.add('active');
+                const targetId = t.getAttribute('data-tab');
+                document.querySelectorAll('.tab-panel').forEach(p => {
+                    p.hidden = (p.id !== targetId);
+                    p.classList.toggle('active', p.id === targetId);
+                });
+            });
+        });
+
+        // Sync live bag count from cart
+        try {
+            const saved = localStorage.getItem('kalash_amulya_cart');
+            if (saved) {
+                const cart = JSON.parse(saved);
+                const count = cart.reduce((sum, i) => sum + (i.qty || 1), 0);
+                const badge = document.getElementById('profileBagCount');
+                if (badge) badge.textContent = count;
+            }
+        } catch(e) {}
+    });
+</script>
+

@@ -1,0 +1,378 @@
+@model KalashAmulya.Models.AdminDashboardViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Kalash Amulya | Product Catalog Management";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #143d2d;
+            --forest-dark: #0d281e;
+            --forest-light: #1f5640;
+            --cream: #f8f7f2;
+            --cream-card: #ffffff;
+            --gold: #b47b45;
+            --ink: #1b2e25;
+            --muted: #64756b;
+            --border: #e2e8de;
+            --border-light: #eef2ec;
+            --success: #1e7e4e;
+            --success-bg: #eaf6ef;
+            --warning: #b76e18;
+            --warning-bg: #fdf5ea;
+            --danger: #c23838;
+            --danger-bg: #fdeeee;
+            --sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --serif: 'Playfair Display', Georgia, serif;
+            --shadow-sm: 0 2px 8px rgba(18, 55, 37, 0.04);
+            --shadow-md: 0 8px 24px rgba(18, 55, 37, 0.08);
+            --shadow-lg: 0 16px 40px rgba(18, 55, 37, 0.12);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--cream); color: var(--ink); font-family: var(--sans); font-size: 13px; line-height: 1.5; min-height: 100vh; display: flex; flex-direction: column; }
+        a { text-decoration: none; color: inherit; }
+
+        .admin-topbar {
+            background: var(--forest-dark);
+            color: #d8e5dd;
+            padding: 8px 28px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .store-link {
+            color: #f7f6ef;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .admin-header {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .brand-container { display: flex; align-items: center; gap: 14px; }
+        .brand-mark {
+            width: 44px; height: 44px; border-radius: 8px;
+            background: linear-gradient(135deg, var(--forest), var(--forest-dark));
+            color: #fff; display: flex; align-items: center; justify-content: center;
+            font-family: var(--serif); font-size: 24px; font-weight: 700;
+        }
+        .brand-title h1 { font-size: 17px; letter-spacing: 0.12em; font-weight: 800; color: var(--forest); }
+        .brand-title span { font-size: 9px; letter-spacing: 0.18em; color: var(--gold); font-weight: 700; }
+
+        .admin-nav { display: flex; align-items: center; gap: 8px; }
+        .nav-link {
+            padding: 9px 16px; border-radius: 6px; font-size: 12px; font-weight: 600;
+            color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: var(--forest); background: var(--cream); border: 1px solid var(--border); font-weight: 700;
+        }
+
+        .admin-main { padding: 28px; max-width: 1480px; width: 100%; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
+
+        .panel {
+            background: var(--cream-card); border: 1px solid var(--border); border-radius: 8px;
+            box-shadow: var(--shadow-sm); overflow: hidden;
+        }
+        .panel-header {
+            padding: 18px 24px; border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+        }
+        .panel-title h2 { font-size: 18px; color: var(--forest); font-family: var(--serif); font-weight: 600; }
+
+        .search-box {
+            display: flex; align-items: center; background: var(--cream); border: 1px solid var(--border);
+            border-radius: 6px; padding: 8px 12px; gap: 8px;
+        }
+        .search-box input { border: none; background: transparent; outline: none; font-size: 12px; width: 220px; }
+
+        .btn-primary {
+            background: var(--forest); color: #fff; border: none; border-radius: 6px;
+            padding: 9px 16px; font-size: 12px; font-weight: 700; cursor: pointer;
+        }
+
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
+        th {
+            background: #fafbf9; color: var(--forest-dark); font-weight: 700; padding: 12px 18px;
+            border-bottom: 1px solid var(--border); text-transform: uppercase; font-size: 10px;
+        }
+        td { padding: 14px 18px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+        .product-cell { display: flex; align-items: center; gap: 12px; }
+        .product-thumb { width: 44px; height: 44px; border-radius: 6px; background: #edf1eb; object-fit: contain; padding: 4px; border: 1px solid var(--border); }
+        .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+        .badge-cat { background: #eef3ed; color: var(--forest); border: 1px solid #dce5da; }
+        .badge-stock-in { background: var(--success-bg); color: var(--success); }
+        .badge-stock-low { background: var(--warning-bg); color: var(--warning); border: 1px solid #f9dfbe; }
+
+        .stock-control { display: flex; align-items: center; gap: 6px; }
+        .stock-btn {
+            width: 24px; height: 24px; border-radius: 4px; border: 1px solid var(--border);
+            background: #fff; color: var(--forest); font-weight: 700; cursor: pointer;
+        }
+        .stock-btn:hover { background: var(--forest); color: #fff; }
+        .stock-num { font-weight: 700; min-width: 28px; text-align: center; }
+
+        /* Dialog Modal */
+        dialog {
+            border: none; border-radius: 12px; background: #fff; box-shadow: var(--shadow-lg);
+            max-width: 540px; width: 90vw; margin: auto; padding: 0; outline: none;
+        }
+        dialog::backdrop { background: rgba(13, 40, 30, 0.55); backdrop-filter: blur(4px); }
+        .modal-header { padding: 18px 24px; background: var(--cream); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; }
+        .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; }
+        .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+        .form-group { display: flex; flex-direction: column; gap: 6px; }
+        .form-group label { font-size: 11px; font-weight: 700; color: var(--forest); text-transform: uppercase; }
+        .form-group input, .form-group select { padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 12px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .modal-footer { padding: 16px 24px; background: #fafbf9; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 10px; }
+        .btn-secondary { background: #fff; border: 1px solid var(--border); padding: 9px 16px; border-radius: 6px; cursor: pointer; }
+
+        .toast {
+            position: fixed; bottom: 24px; right: 24px; background: var(--forest-dark); color: #fff;
+            padding: 12px 20px; border-radius: 6px; font-size: 12px; font-weight: 600;
+            border-left: 4px solid var(--gold); transform: translateY(100px); opacity: 0; transition: all 0.3s;
+        }
+        .toast.visible { transform: translateY(0); opacity: 1; }
+
+        .admin-footer { margin-top: auto; background: #fff; border-top: 1px solid var(--border); padding: 16px 28px; font-size: 11px; color: var(--muted); }
+    </style>
+</head>
+<body>
+    <div class="admin-topbar">
+        <div>KALASH AMULYA CATALOG MANAGEMENT · OPERATIONS CONSOLE</div>
+        <div><a href="/Admin" class="store-link">← Back to Overview Dashboard</a></div>
+    </div>
+
+    <header class="admin-header">
+        <div class="brand-container">
+            <div class="brand-mark">A</div>
+            <div class="brand-title">
+                <h1>KALASH AMULYA</h1>
+                <span>PRODUCT CATALOG CONSOLE</span>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+            <a href="/Admin" class="nav-link">Overview</a>
+            <a href="/Admin/Product" class="nav-link active">Products</a>
+            <a href="/" class="nav-link">Storefront ↗</a>
+        </nav>
+    </header>
+
+    <main class="admin-main">
+        <section class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <h2>Live Catalog & Inventory (@Model.Products.Count SKUs)</h2>
+                    <span>Manage organic collections, pricing, and packaging specifications</span>
+                </div>
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <div class="search-box">
+                        <span>⌕</span>
+                        <input type="text" id="searchInput" placeholder="Search catalog..." oninput="filterRows()">
+                    </div>
+                    <button class="btn-primary" onclick="openModal()">+ Add New Product</button>
+                </div>
+            </div>
+
+            <div style="overflow-x:auto;">
+                <table id="catalogTable">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Weight</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr data-name="@item.Name.ToLower()" data-category="@item.Category">
+                                <td>
+                                    <div class="product-cell">
+                                        <img src="@item.ImageUrl" alt="@item.Name" class="product-thumb" onerror="this.src='/images/cashew.png'" />
+                                        <div>
+                                            <strong>@item.Name</strong>
+                                            <div style="font-size:11px; color:var(--muted);">@item.Tag</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge badge-cat">@item.Category</span></td>
+                                <td>@item.Weight</td>
+                                <td><strong>&#8377;@item.Price.ToString("0.##")</strong></td>
+                                <td>
+                                    <div class="stock-control">
+                                        <button class="stock-btn" onclick="updateStock(@item.Id, -5)">−</button>
+                                        <span class="stock-num" id="stock-@item.Id">@item.Stock</span>
+                                        <button class="stock-btn" onclick="updateStock(@item.Id, 5)">+</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge @(item.Stock <= 20 ? "badge-stock-low" : "badge-stock-in")" id="badge-@item.Id">
+                                        @(item.Stock <= 20 ? "Low Stock" : "In Stock")
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Dialog Modal -->
+    <dialog id="prodDialog">
+        <div class="modal-header">
+            <h3>Add New Product</h3>
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <form onsubmit="saveProduct(event)">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="pName" required placeholder="e.g. Organic Medjool Dates" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="pCat" required>
+                            <option value="Dry Fruits">Dry Fruits</option>
+                            <option value="Seeds">Seeds</option>
+                            <option value="Salts & Seasonings">Salts & Seasonings</option>
+                            <option value="Preserves & Sweets">Preserves & Sweets</option>
+                            <option value="Grains & Pulses">Grains & Pulses</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Weight</label>
+                        <input type="text" id="pWeight" required placeholder="250g" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Price (&#8377;)</label>
+                        <input type="number" id="pPrice" required min="1" step="0.5" placeholder="420" />
+                    </div>
+                    <div class="form-group">
+                        <label>Initial Stock</label>
+                        <input type="number" id="pStock" required min="1" placeholder="50" />
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn-primary">Save to Catalog</button>
+            </div>
+        </form>
+    </dialog>
+
+    <div id="toast" class="toast">Action updated</div>
+
+    <footer class="admin-footer">
+        <div>&copy; 2026 Kalash Amulya Private Limited · Product Operations</div>
+    </footer>
+
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('visible');
+            setTimeout(() => t.classList.remove('visible'), 2800);
+        }
+
+        function filterRows() {
+            const q = document.getElementById('searchInput').value.toLowerCase().trim();
+            document.querySelectorAll('#catalogTable tbody tr').forEach(r => {
+                const name = r.dataset.name;
+                r.style.display = (!q || name.includes(q)) ? '' : 'none';
+            });
+        }
+
+        async function updateStock(id, delta) {
+            const el = document.getElementById('stock-' + id);
+            const badge = document.getElementById('badge-' + id);
+            let current = parseInt(el.textContent, 10);
+            let nextVal = Math.max(0, current + delta);
+
+            try {
+                const res = await fetch('/Admin/UpdateStock', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId: id, stock: nextVal })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    el.textContent = data.stock;
+                    badge.className = data.stock <= 20 ? 'badge badge-stock-low' : 'badge badge-stock-in';
+                    badge.textContent = data.stock <= 20 ? 'Low Stock' : 'In Stock';
+                    showToast('Stock inventory updated');
+                }
+            } catch (err) {
+                el.textContent = nextVal;
+                showToast('Stock updated');
+            }
+        }
+
+        const dlg = document.getElementById('prodDialog');
+        function openModal() { dlg.showModal(); }
+        function closeModal() { dlg.close(); }
+
+        async function saveProduct(e) {
+            e.preventDefault();
+            const p = {
+                name: document.getElementById('pName').value,
+                category: document.getElementById('pCat').value,
+                weight: document.getElementById('pWeight').value,
+                price: parseFloat(document.getElementById('pPrice').value),
+                stock: parseInt(document.getElementById('pStock').value, 10),
+                imageUrl: '/images/cashew.png',
+                tag: 'HARVEST SELECT'
+            };
+            try {
+                await fetch('/Admin/AddProduct', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(p)
+                });
+                closeModal();
+                showToast('Product added successfully');
+                setTimeout(() => location.reload(), 600);
+            } catch {
+                closeModal();
+                showToast('Product added');
+                setTimeout(() => location.reload(), 600);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,1240 @@
+@model IEnumerable<KalashAmulya.Models.AdminProductItem>
+@{
+    ViewData["Title"] = "Kalash Amulya - Pure Goodness Since Heritage";
+    Layout = "_Layout";
+
+    var allProducts = Model?.ToList() ?? new List<KalashAmulya.Models.AdminProductItem>();
+    
+    KalashAmulya.Models.AdminProductItem GetP(int id, string fallbackName, decimal fallbackPrice, string fallbackImg, string fallbackCat, string fallbackWeight, string fallbackTag, string fallbackDesc, int fallbackStock = 50)
+    {
+        var found = allProducts.FirstOrDefault(p => p.Id == id);
+        if (found != null) return found;
+        return new KalashAmulya.Models.AdminProductItem
+        {
+            Id = id,
+            Name = fallbackName,
+            Price = fallbackPrice,
+            Mrp = Math.Round(fallbackPrice * 1.25m),
+            ImageUrl = fallbackImg,
+            Category = fallbackCat,
+            Weight = fallbackWeight,
+            Tag = fallbackTag,
+            Description = fallbackDesc,
+            Stock = fallbackStock,
+            IsActive = true
+        };
+    }
+
+    // DRY FRUITS (5 items)
+    var p1 = GetP(1, "Royal Jumbo Cashews (Kaju W240)", 420m, "/images/cashew_bowl.png", "Dry Fruits", "250g Jar", "BESTSELLER", "Hand-graded jumbo whole white cashews. Naturally creamy & rich in healthy fats.", 85);
+    var p2 = GetP(2, "California Crisp Almonds (Badam)", 380m, "/images/almond_bowl.png", "Dry Fruits", "250g Jar", "HARVEST SELECT", "Crunchy, golden-brown California badam rich in Vitamin E, magnesium and antioxidants.", 64);
+    var p3 = GetP(3, "Salted Roasted Pistachios (Pista)", 520m, "/images/pistachio_bowl.png", "Dry Fruits", "250g Jar", "POPULAR", "Naturally cracked, gently roasted with Himalayan sea salt. Unopened shell-free guarantee.", 42);
+    var p4 = GetP(4, "Royal Iranian Mamra Badam", 750m, "/images/almond_bowl.png", "Dry Fruits", "250g Jar", "ROYAL HARVEST", "Original high-oil Iranian Mamra giri. Unrivalled natural sweetness and brain nourishment.", 28);
+    var p5 = GetP(5, "Jumbo Foxnut Phool Makhana", 290m, "/images/makhana_bowl.png", "Dry Fruits", "200g Jar", "SUPER-CRUNCH", "Handpicked jumbo 6-suta fox nuts. Air-popped to airy crispness with zero bitter seeds.", 14);
+
+    // SEEDS (4 items)
+    var p6 = GetP(6, "Raw Sunflower Seeds", 190m, "/images/cashew_bowl.png", "Seeds", "250g Jar", "VITAMIN E", "Cleaned kernel kernels supporting cellular repair, cardiac health, and radiant skin.", 82);
+    var p7 = GetP(7, "Roasted Watermelon Seeds", 210m, "/images/pistachio_bowl.png", "Seeds", "200g Jar", "ZINC & PROTEIN", "Crunchy hulled tarbooj seeds loaded with magnesium and plant protein for quick snacking.", 65);
+    var p8 = GetP(8, "Golden Flax Seeds (Alsi)", 150m, "/images/almond_bowl.png", "Seeds", "250g Jar", "OMEGA-3 HERO", "Highest natural vegetarian source of ALA Omega-3 fatty acids for lipid management.", 90);
+    var p9 = GetP(9, "Organic Chia Seeds", 220m, "/images/walnut_bowl.png", "Seeds", "250g Jar", "SOLUBLE FIBER", "Pristine raw black chia seeds that form a soothing gut-protective gel when soaked in water.", 75);
+
+    // SALTS & SEASONINGS (4 items)
+    var p10 = GetP(10, "Himalayan Pink Rock Salt Crystals", 140m, "/images/pistachio_pile.png", "Salts & Seasonings", "500g Jar", "MINERAL RICH", "Unrefined pink subterranean crystals rich in natural trace electrolytes.", 120);
+    var p11 = GetP(11, "Kala Namak (Black Salt Powder)", 110m, "/images/cashew_pile.png", "Salts & Seasonings", "500g Jar", "AYURVEDIC", "Authentic kiln-fired digestive rock salt with traditional pungent aroma.", 95);
+    var p12 = GetP(12, "Organic Oregano & Herb Blend", 160m, "/images/walnut_pile.png", "Salts & Seasonings", "100g Jar", "HANDCRAFTED", "Sun-dried aromatic Mediterranean oregano leaves, crushed pepper & sea salt.", 60);
+    var p13 = GetP(13, "Royal Heritage Spices & Shahi Garam Masala", 210m, "/images/cashew_pile.png", "Salts & Seasonings", "100g Jar", "AROMATIC", "Stone-ground whole spice blend featuring green cardamom, clove, cinnamon & mace.", 55);
+
+    // PRESERVES & SWEETS (5 items)
+    var p14 = GetP(14, "Pure Desi Shakkariya Jaggery (Gur)", 195m, "/images/walnut_bowl.png", "Preserves & Sweets", "500g Jar", "PURE GUR", "Additive-free raw cane sugar blocks clarifying gut toxins and boosting iron.", 48);
+    var p15 = GetP(15, "Satvik Pure Cow Ghee Besan Ladoo", 320m, "/images/almond_pile.png", "Preserves & Sweets", "400g Jar", "DESI GHEE", "Traditional slow-roasted gram flour sweets crafted with A2 bilona cow ghee and rock sugar.", 30);
+    var p16 = GetP(16, "Organic Amla Murabba in Mishri", 260m, "/images/makhana_bowl.png", "Preserves & Sweets", "500g Glass Jar", "HERITAGE", "Whole Himalayan wild amla steeped slowly in unrefined raw rock sugar syrup.", 35);
+    var p17 = GetP(17, "Chatpata Amla Candy", 180m, "/images/cashew_bowl.png", "Preserves & Sweets", "300g Jar", "DIGESTIVE", "Sweet and sour Vitamin-C bites spiced with digestive rock salt and cumin.", 70);
+    var p18 = GetP(18, "Traditional Ramkela Mango Pickles", 240m, "/images/walnut_pile.png", "Preserves & Sweets", "500g Jar", "COLD-PRESSED", "Sun-cured raw Ramkela mango steeped in cold-pressed mustard oil with fenugreek & fennel.", 40);
+
+    // GRAINS & PULSES (3 items)
+    var p19 = GetP(19, "Certified Unpolished Pulses (20 Varieties)", 185m, "/images/pistachio_bowl.png", "Grains & Pulses", "1kg Jar", "100% UNPOLISHED", "Cooperative harvested unpolished pulses. Zero chemical wash, maximum protein & earthy broth.", 110);
+    var p20 = GetP(20, "Organic White Quinoa", 280m, "/images/makhana_pile.png", "Grains & Pulses", "500g Jar", "COMPLETE PROTEIN", "Pre-washed, saponin-free ancient super grain containing all 9 essential amino acids.", 45);
+    var p21 = GetP(21, "Heritage Roasted Daliya", 120m, "/images/cashew_solid.jpg", "Grains & Pulses", "500g Jar", "HIGH FIBER", "Stone-milled broken whole wheat gently pre-roasted for quick morning porridge & khichdi.", 75);
+
+    var bestsellersList = new[] { p1, p2, p3, p4, p5 };
+    var staplesList = new[] { p19, p20, p21 };
+    var seedsList = new[] { p6, p7, p8, p9 };
+}
+
+<!-- =========================================================================
+     1. HERO SECTION: CURVED CREAM BANNER WITH BOLD SERIF HEADLINE
+     ========================================================================= -->
+<section class="roopak-hero-section" id="hero">
+    <div class="roopak-hero-card">
+        <div class="roopak-hero-grid">
+            <div class="hero-text-content">
+                <div class="hero-badge-pill">
+                    <span class="pulse-dot"></span>
+                    <span>100% PURE &bull; UNPOLISHED &bull; DIRECT SOURCED</span>
+                </div>
+                <h1 class="hero-headline">
+                    Rooted in Nature.<br>
+                    <em>Handpicked for You.</em>
+                </h1>
+                <p class="hero-subheading">
+                    Experience the unadulterated taste of sun-dried jumbo dry fruits, certified unpolished pulses, stone-ground mineral salts, and slow-simmered Ayurvedic preserves curated for your family's daily vitality.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="#shop" class="hero-pill-btn hero-btn-dark">
+                        <span>Shop Collection</span>
+                        <span class="btn-arrow">&rarr;</span>
+                    </a>
+                    <a href="#bestsellers" class="hero-pill-btn hero-btn-outline">
+                        <span>View Bestsellers</span>
+                        <span class="btn-arrow">&darr;</span>
+                    </a>
+                </div>
+                <div class="hero-trust-metrics">
+                    <div class="metric-item">
+                        <strong>50,000+</strong>
+                        <span>Families Nourished</span>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="metric-item">
+                        <strong>FSSAI Grade</strong>
+                        <span>100% Lab Tested</span>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="metric-item">
+                        <strong>Kanpur Express</strong>
+                        <span>Same-Day Dispatch</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-visual-showcase">
+                <div class="hero-visual-canvas">
+                    <div class="sun-ambient-circle"></div>
+                    <div class="hero-heroic-image-container">
+                        <!-- Hero Giant Realistic Jar Display -->
+                        <div class="amulya-jar-showcase hero-jar">
+                            <div class="amulya-jar-cap"></div>
+                            <div class="amulya-jar-neck"></div>
+                            <div class="amulya-jar-body">
+                                <img class="amulya-jar-fill" src="/images/cashew_bowl.png" alt="Kalash Amulya Royal Jumbo Cashews" loading="eager" />
+                                <div class="amulya-jar-glare"></div>
+                                <div class="amulya-jar-sticker">
+                                    <span class="st-brand">AMULYA</span>
+                                    <span class="st-name">ROYAL CASHEW W240</span>
+                                    <span class="st-pure">100% PURE &bull; FSSAI GRADE</span>
+                                </div>
+                            </div>
+                            <div class="amulya-jar-shadow"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Floating Heritage Seals -->
+                    <div class="hero-floating-seal seal-top-right">
+                        <span class="seal-icon">&#10047;</span>
+                        <div>
+                            <strong>W240 Grade</strong>
+                            <small>Zero broken kernels</small>
+                        </div>
+                    </div>
+                    <div class="hero-floating-seal seal-bottom-left">
+                        <span class="seal-num">&#9733; 4.9/5</span>
+                        <small>Over 12,000+ Verified Reviews</small>
+                    </div>
+                    <div class="hero-side-ribbon">
+                        <span>ESTD. 1958 KANPUR</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     2. 4 USP BADGES STRIP: 4 PASTEL-TINTED CARDS
+     ========================================================================= -->
+<section class="usp-badges-strip" aria-label="Our Value Guarantees">
+    <div class="usp-container">
+        <div class="usp-grid">
+            <!-- USP 1: Fast Delivery (Mint Pastel) -->
+            <div class="usp-card usp-mint">
+                <div class="usp-icon-wrap">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="1" y="3" width="15" height="13"></rect>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                    </svg>
+                </div>
+                <div class="usp-text">
+                    <h4>Fast All-India Delivery</h4>
+                    <p>Express 24-hr dispatch across India with dedicated local same-day delivery in Kanpur.</p>
+                </div>
+            </div>
+
+            <!-- USP 2: 100% Unpolished Pulses (Soft Peach) -->
+            <div class="usp-card usp-peach">
+                <div class="usp-icon-wrap">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                    </svg>
+                </div>
+                <div class="usp-text">
+                    <h4>100% Unpolished Pulses</h4>
+                    <p>Zero water polishing, marble powder, or oil dyes. Natural dietary fiber &amp; protein intact.</p>
+                </div>
+            </div>
+
+            <!-- USP 3: Safe Food-Grade Packaging (Lavender) -->
+            <div class="usp-card usp-lavender">
+                <div class="usp-icon-wrap">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                    </svg>
+                </div>
+                <div class="usp-text">
+                    <h4>Safe Jar Packaging</h4>
+                    <p>Food-grade transparent cylindrical pet/glass jars with airtight brown screw caps.</p>
+                </div>
+            </div>
+
+            <!-- USP 4: Wide Direct-Sourced Range (Ice Blue) -->
+            <div class="usp-card usp-iceblue">
+                <div class="usp-icon-wrap">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                </div>
+                <div class="usp-text">
+                    <h4>Wide Direct-Sourced Range</h4>
+                    <p>Procured straight from certified farmer clusters in Kashmir, Gujarat, and Himalayan valleys.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     3. CATEGORY HIGHLIGHT PILLS: 5 PASTEL PILL CARDS
+     ========================================================================= -->
+<section class="category-pills-section" id="categories">
+    <div class="content-container">
+        <div class="section-title-wrap text-center">
+            <span class="roopak-eyebrow">AMULYA HERITAGE VERTICALS</span>
+            <h2 class="roopak-section-title">Explore by <em>Pantry Category</em></h2>
+            <p class="section-subtext">Click any category below to immediately explore our curated harvests.</p>
+        </div>
+
+        <div class="category-pill-grid">
+            <!-- 01: Dry Fruits -->
+            <a href="javascript:void(0)" class="category-pill-card pill-dry" data-category="Dry Fruits">
+                <span class="pill-number">01</span>
+                <div class="pill-image-frame">
+                    <img src="/images/cashew_bowl.png" alt="Dry Fruits" />
+                </div>
+                <div class="pill-content">
+                    <div class="pill-title-row">
+                        <h3>Dry Fruits</h3>
+                        <span class="pill-arrow">&rarr;</span>
+                    </div>
+                    <p class="pill-detail">Cashew W240, California Almond, Pistachio, Mamra &amp; Makhana.</p>
+                </div>
+            </a>
+
+            <!-- 02: Seeds -->
+            <a href="javascript:void(0)" class="category-pill-card pill-seeds" data-category="Seeds">
+                <span class="pill-number">02</span>
+                <div class="pill-image-frame">
+                    <img src="/images/almond_bowl.png" alt="Edible Seeds" />
+                </div>
+                <div class="pill-content">
+                    <div class="pill-title-row">
+                        <h3>Edible Seeds</h3>
+                        <span class="pill-arrow">&rarr;</span>
+                    </div>
+                    <p class="pill-detail">Sunflower, Watermelon, Golden Flax &amp; Organic Chia Seeds.</p>
+                </div>
+            </a>
+
+            <!-- 03: Salts & Seasonings -->
+            <a href="javascript:void(0)" class="category-pill-card pill-salts" data-category="Salts & Seasonings">
+                <span class="pill-number">03</span>
+                <div class="pill-image-frame">
+                    <img src="/images/pistachio_bowl.png" alt="Salts and Seasonings" />
+                </div>
+                <div class="pill-content">
+                    <div class="pill-title-row">
+                        <h3>Salts &amp; Seasonings</h3>
+                        <span class="pill-arrow">&rarr;</span>
+                    </div>
+                    <p class="pill-detail">Himalayan Pink Rock Salt, Kala Namak &amp; Herb Seasonings.</p>
+                </div>
+            </a>
+
+            <!-- 04: Preserves & Sweets -->
+            <a href="javascript:void(0)" class="category-pill-card pill-sweets" data-category="Preserves & Sweets">
+                <span class="pill-number">04</span>
+                <div class="pill-image-frame">
+                    <img src="/images/walnut_bowl.png" alt="Preserves and Sweets" />
+                </div>
+                <div class="pill-content">
+                    <div class="pill-title-row">
+                        <h3>Preserves &amp; Sweets</h3>
+                        <span class="pill-arrow">&rarr;</span>
+                    </div>
+                    <p class="pill-detail">Amla Murabba in Mishri, Chatpata Candy &amp; Desi Jaggery.</p>
+                </div>
+            </a>
+
+            <!-- 05: Grains & Pulses -->
+            <a href="javascript:void(0)" class="category-pill-card pill-grains" data-category="Grains & Pulses">
+                <span class="pill-number">05</span>
+                <div class="pill-image-frame">
+                    <img src="/images/makhana_bowl.png" alt="Grains and Pulses" />
+                </div>
+                <div class="pill-content">
+                    <div class="pill-title-row">
+                        <h3>Grains &amp; Pulses</h3>
+                        <span class="pill-arrow">&rarr;</span>
+                    </div>
+                    <p class="pill-detail">Unpolished Toor Dal, Moong Dal, Quinoa &amp; Roasted Daliya.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     4. BESTSELLER DRY FRUITS GRID: QUESTION HEADING (WITH CYLINDRICAL JARS)
+     ========================================================================= -->
+<section class="roopak-bestsellers-section" id="bestsellers">
+    <div class="content-container">
+        <div class="section-title-wrap">
+            <span class="roopak-eyebrow">CUSTOMER FAVOURITES</span>
+            <h2 class="roopak-section-title">Which Bestseller Dry Fruits Do Customers <em>Love the Most?</em></h2>
+            <p class="section-subtext">Each batch is triple-sorted for uniform size, moisture-verified below 5%, and vacuum-sealed in airtight cylindrical jars for extraordinary crunch.</p>
+        </div>
+
+                <div class="bestsellers-grid">
+            @foreach (var prod in bestsellersList)
+            {
+                <div class="roopak-product-card" data-product-id="@prod.Id">
+                    <div class="ribbon-tag">@prod.Tag</div>
+                    <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
+                        <div class="amulya-jar-showcase">
+                            <div class="amulya-jar-cap"></div>
+                            <div class="amulya-jar-neck"></div>
+                            <div class="amulya-jar-body">
+                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" />
+                                <div class="amulya-jar-glare"></div>
+                                <div class="amulya-jar-sticker">
+                                    <span class="st-brand">AMULYA</span>
+                                    <span class="st-name">@prod.Name.ToUpperInvariant()</span>
+                                    <span class="st-pure">100% PURE &bull; FSSAI GRADE</span>
+                                </div>
+                            </div>
+                            <div class="amulya-jar-shadow"></div>
+                        </div>
+                        <span class="quick-view-badge">Quick View</span>
+                    </div>
+                    <div class="product-details-box">
+                        <div class="product-rating-row">
+                            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            @if (prod.Stock <= 0)
+                            {
+                                <span class="stock-indicator-badge stock-badge-out">Out of Stock</span>
+                            }
+                            else if (prod.Stock <= 20)
+                            {
+                                <span class="stock-indicator-badge stock-badge-low">Only @prod.Stock left</span>
+                            }
+                            else
+                            {
+                                <span class="review-count">(@prod.Stock in stock)</span>
+                            }
+                        </div>
+                        <span class="product-cat-weight">@prod.Category &bull; @prod.Weight</span>
+                        <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
+                        <p class="product-brief">@prod.Description</p>
+                        <div class="product-pricing-row">
+                            <div class="price-stack">
+                                <span class="current-price">&#8377;@prod.Price</span>
+                                <span class="mrp-strikethrough">&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</span>
+                            </div>
+                            @if (prod.Stock > 0)
+                            {
+                                <button type="button" class="add-to-cart-pill" onclick="window.kalashAddToCart(@prod.Id)">
+                                    <span>+ ADD TO CART</span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="add-to-cart-pill out-of-stock-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
+                                    <span>OUT OF STOCK</span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     5. SPLIT PROMO GRID A: HIMALAYAN PINK SALT + 3 PRODUCT CARDS
+     ========================================================================= -->
+<section class="split-promo-section" id="salts">
+    <div class="content-container">
+        <div class="split-promo-grid layout-left-featured">
+            <!-- Left: Large Lifestyle Feature Card -->
+            <div class="promo-feature-banner banner-pink-salt">
+                <div class="feature-banner-content">
+                    <span class="feature-pill-badge">84+ NATURAL TRACE MINERALS</span>
+                    <h3 class="feature-title">Pure Himalayan Pink Salt &amp; Mineral Seasonings</h3>
+                    <p class="feature-text">
+                        Mined ethically from untouched subterranean crystal caves. Completely unbleached, free from synthetic micro-plastic anti-caking agents, and balancing electrolytes naturally.
+                    </p>
+                    <ul class="feature-checklist">
+                        <li><span>&#10003;</span> 100% Unrefined &amp; Non-Iodized Raw Form</li>
+                        <li><span>&#10003;</span> Rich in Bio-Available Potassium &amp; Calcium</li>
+                        <li><span>&#10003;</span> Stone-Crushed in Airtight Food-Grade Glass Jars</li>
+                    </ul>
+                    <a href="#shop" class="feature-action-btn">
+                        <span>Shop Seasonings Collection</span>
+                        <span class="btn-arrow">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+
+                        <!-- Right: 3 Product Cards -->
+            <div class="promo-cards-column">
+                @foreach (var prod in new[] { p14, p16, p17 })
+                {
+                    <div class="mini-product-card" data-product-id="@prod.Id">
+                        <div class="mini-thumb">
+                            <div class="amulya-jar-showcase mini-jar">
+                                <div class="amulya-jar-cap"></div>
+                                <div class="amulya-jar-neck"></div>
+                                <div class="amulya-jar-body">
+                                    <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" />
+                                    <div class="amulya-jar-glare"></div>
+                                    <div class="amulya-jar-sticker">
+                                        <span class="st-brand">AMULYA</span>
+                                        <span class="st-name">@prod.Name.ToUpperInvariant()</span>
+                                        <span class="st-pure">100% PURE &bull; MINERAL</span>
+                                    </div>
+                                </div>
+                                <div class="amulya-jar-shadow"></div>
+                            </div>
+                        </div>
+                        <div class="mini-info">
+                            <span class="mini-cat">@prod.Category &bull; @prod.Weight</span>
+                            <h4 class="mini-title">@prod.Name</h4>
+                            <p class="mini-desc">@prod.Description</p>
+                            <div class="mini-price-row">
+                                <div class="mini-prices">
+                                    <strong>&#8377;@prod.Price</strong>
+                                    <small>&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</small>
+                                    @if (prod.Stock <= 20 && prod.Stock > 0)
+                                    {
+                                        <span class="stock-indicator-badge stock-badge-low" style="font-size: 8px;">Only @prod.Stock left</span>
+                                    }
+                                </div>
+                                @if (prod.Stock > 0)
+                                {
+                                    <button type="button" class="mini-add-btn" onclick="window.kalashAddToCart(@prod.Id)">+ ADD</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="mini-add-btn" disabled style="opacity: 0.5;">OUT</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     6. SPLIT PROMO GRID B: 3 PRODUCTS ON LEFT + FEATURE CARD ON RIGHT
+     ========================================================================= -->
+<section class="split-promo-section promo-alt-bg" id="preserves">
+    <div class="content-container">
+        <div class="split-promo-grid layout-right-featured">
+                        <!-- Left: 3 Product Cards -->
+            <div class="promo-cards-column">
+                @foreach (var prod in new[] { p14, p16, p17 })
+                {
+                    <div class="mini-product-card" data-product-id="@prod.Id">
+                        <div class="mini-thumb">
+                            <div class="amulya-jar-showcase mini-jar">
+                                <div class="amulya-jar-cap"></div>
+                                <div class="amulya-jar-neck"></div>
+                                <div class="amulya-jar-body">
+                                    <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" />
+                                    <div class="amulya-jar-glare"></div>
+                                    <div class="amulya-jar-sticker">
+                                        <span class="st-brand">AMULYA</span>
+                                        <span class="st-name">@prod.Name.ToUpperInvariant()</span>
+                                        <span class="st-pure">100% PURE &bull; PRESERVE</span>
+                                    </div>
+                                </div>
+                                <div class="amulya-jar-shadow"></div>
+                            </div>
+                        </div>
+                        <div class="mini-info">
+                            <span class="mini-cat">@prod.Category &bull; @prod.Weight</span>
+                            <h4 class="mini-title">@prod.Name</h4>
+                            <p class="mini-desc">@prod.Description</p>
+                            <div class="mini-price-row">
+                                <div class="mini-prices">
+                                    <strong>&#8377;@prod.Price</strong>
+                                    <small>&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</small>
+                                    @if (prod.Stock <= 20 && prod.Stock > 0)
+                                    {
+                                        <span class="stock-indicator-badge stock-badge-low" style="font-size: 8px;">Only @prod.Stock left</span>
+                                    }
+                                </div>
+                                @if (prod.Stock > 0)
+                                {
+                                    <button type="button" class="mini-add-btn" onclick="window.kalashAddToCart(@prod.Id)">+ ADD</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="mini-add-btn" disabled style="opacity: 0.5;">OUT</button>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Right: Large Lifestyle Feature Card -->
+            <div class="promo-feature-banner banner-heritage-murabba">
+                <div class="feature-banner-content">
+                    <span class="feature-pill-badge">AYURVEDIC RASAYANA HERITAGE</span>
+                    <h3 class="feature-title">Traditional Indian Murabba &amp; Preserves</h3>
+                    <p class="feature-text">
+                        Handcrafted with hand-picked winter amla berries and boiled in pure mishri syrup following traditional earthen pot curing methods. Rich in natural bio-active Vitamin C for immunity and healthy digestion.
+                    </p>
+                    <ul class="feature-checklist">
+                        <li><span>&#10003;</span> Zero Artificial Citric Acid or Synthetic Colours</li>
+                        <li><span>&#10003;</span> Sweetened with Unrefined Rock Sugar (Mishri)</li>
+                        <li><span>&#10003;</span> Sealed in Premium Airtight Glass Jars</li>
+                    </ul>
+                    <a href="#shop" class="feature-action-btn">
+                        <span>Explore Heritage Preserves</span>
+                        <span class="btn-arrow">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     7. HEALTHY STAPLES GRID: QUESTION HEADING (WITH CYLINDRICAL JARS)
+     ========================================================================= -->
+<section class="roopak-staples-section" id="grains">
+    <div class="content-container">
+        <div class="section-title-wrap">
+            <span class="roopak-eyebrow">AUTHENTIC DAILY NUTRITION</span>
+            <h2 class="roopak-section-title">Wholesome Grains &amp; <em>Certified Unpolished Pulses</em></h2>
+            <p class="section-subtext">Commercial supermarket pulses lose up to 40% of their aleurone protein layer during chemical polishing. Kalash Amulya brings you unadulterated, field-fresh staples in airtight jars.</p>
+        </div>
+
+        <div class="bestsellers-grid staples-4-grid">
+            @foreach (var prod in staplesList)
+            {
+                <div class="roopak-product-card" data-product-id="@prod.Id">
+                    <div class="ribbon-tag seed-tag">@prod.Tag</div>
+                    <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
+                        <div class="amulya-jar-showcase">
+                            <div class="amulya-jar-cap"></div>
+                            <div class="amulya-jar-neck"></div>
+                            <div class="amulya-jar-body">
+                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" />
+                                <div class="amulya-jar-glare"></div>
+                                <div class="amulya-jar-sticker">
+                                    <span class="st-brand">AMULYA</span>
+                                    <span class="st-name">@prod.Name.ToUpperInvariant()</span>
+                                    <span class="st-pure">100% PURE &bull; RAW &amp; PURE</span>
+                                </div>
+                            </div>
+                            <div class="amulya-jar-shadow"></div>
+                        </div>
+                        <span class="quick-view-badge">Quick View</span>
+                    </div>
+                    <div class="product-details-box">
+                        <div class="product-rating-row">
+                            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            @if (prod.Stock <= 0)
+                            {
+                                <span class="stock-indicator-badge stock-badge-out">Out of Stock</span>
+                            }
+                            else if (prod.Stock <= 20)
+                            {
+                                <span class="stock-indicator-badge stock-badge-low">Only @prod.Stock left</span>
+                            }
+                            else
+                            {
+                                <span class="review-count">(@prod.Stock in stock)</span>
+                            }
+                        </div>
+                        <span class="product-cat-weight">@prod.Category &bull; @prod.Weight</span>
+                        <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
+                        <p class="product-brief">@prod.Description</p>
+                        <div class="product-pricing-row">
+                            <div class="price-stack">
+                                <span class="current-price">&#8377;@prod.Price</span>
+                                <span class="mrp-strikethrough">&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</span>
+                            </div>
+                            @if (prod.Stock > 0)
+                            {
+                                <button type="button" class="add-to-cart-pill" onclick="window.kalashAddToCart(@prod.Id)">
+                                    <span>+ ADD TO CART</span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="add-to-cart-pill out-of-stock-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
+                                    <span>OUT OF STOCK</span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     8. SUPERFOOD SEEDS SECTION (WITH CYLINDRICAL JARS)
+     ========================================================================= -->
+<section class="roopak-staples-section" id="seeds" style="background: #fcfbf7; border-top: 1px solid #ebe5df;">
+    <div class="content-container">
+        <div class="section-title-wrap">
+            <span class="roopak-eyebrow">ESSENTIAL MICRONUTRIENTS &amp; HEALTHY FATS</span>
+            <h2 class="roopak-section-title">Raw &amp; Roasted <em>Nutrient-Dense Edible Seeds</em></h2>
+            <p class="section-subtext">Hand-harvested sunflower, watermelon, flax, and chia seeds packed with plant protein, magnesium, and essential Omega-3 fatty acids.</p>
+        </div>
+
+        <div class="bestsellers-grid staples-4-grid">
+            @foreach (var prod in seedsList)
+            {
+                <div class="roopak-product-card" data-product-id="@prod.Id">
+                    <div class="ribbon-tag seed-tag">@prod.Tag</div>
+                    <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
+                        <div class="amulya-jar-showcase">
+                            <div class="amulya-jar-cap"></div>
+                            <div class="amulya-jar-neck"></div>
+                            <div class="amulya-jar-body">
+                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" />
+                                <div class="amulya-jar-glare"></div>
+                                <div class="amulya-jar-sticker">
+                                    <span class="st-brand">AMULYA</span>
+                                    <span class="st-name">@prod.Name.ToUpperInvariant()</span>
+                                    <span class="st-pure">100% PURE &bull; SUPERFOOD</span>
+                                </div>
+                            </div>
+                            <div class="amulya-jar-shadow"></div>
+                        </div>
+                        <span class="quick-view-badge">Quick View</span>
+                    </div>
+                    <div class="product-details-box">
+                        <div class="product-rating-row">
+                            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            @if (prod.Stock <= 0)
+                            {
+                                <span class="stock-indicator-badge stock-badge-out">Out of Stock</span>
+                            }
+                            else if (prod.Stock <= 20)
+                            {
+                                <span class="stock-indicator-badge stock-badge-low">Only @prod.Stock left</span>
+                            }
+                            else
+                            {
+                                <span class="review-count">(@prod.Stock in stock)</span>
+                            }
+                        </div>
+                        <span class="product-cat-weight">@prod.Category &bull; @prod.Weight</span>
+                        <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
+                        <p class="product-brief">@prod.Description</p>
+                        <div class="product-pricing-row">
+                            <div class="price-stack">
+                                <span class="current-price">&#8377;@prod.Price</span>
+                                <span class="mrp-strikethrough">&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</span>
+                            </div>
+                            @if (prod.Stock > 0)
+                            {
+                                <button type="button" class="add-to-cart-pill" onclick="window.kalashAddToCart(@prod.Id)">
+                                    <span>+ ADD TO CART</span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="add-to-cart-pill out-of-stock-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
+                                    <span>OUT OF STOCK</span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     9. INTERACTIVE RECIPES GRID: QUESTION HEADING
+     ========================================================================= -->
+<section class="roopak-recipes-section" id="recipes">
+    <div class="content-container">
+        <div class="section-title-wrap text-center">
+            <span class="roopak-eyebrow">NOURISHING KITCHEN INSPIRATION</span>
+            <h2 class="roopak-section-title">What Healthy Recipes Can You Make With <em>Amulya?</em></h2>
+            <p class="section-subtext">Click any recipe card below to view simple, step-by-step cooking steps crafted with our pure ingredients.</p>
+        </div>
+
+        <div class="recipes-grid">
+            <!-- Recipe 1: Dry Fruit Energy Ladoo -->
+            <div class="recipe-card" data-recipe-id="1">
+                <div class="recipe-header-bar">
+                    <span class="recipe-tag">NO ADDED SUGAR</span>
+                    <span class="recipe-meta">&#9201; 15 mins &bull; Easy</span>
+                </div>
+                <h3 class="recipe-title">Dry Fruit Energy Ladoo</h3>
+                <p class="recipe-summary">Wholesome energy balls made with Amulya Cashews, California Almonds, Kashmiri Walnuts, and pure Desi Jaggery.</p>
+                <div class="recipe-ingredients-preview">
+                    <strong>Hero Ingredients:</strong> Amulya Cashews, Almonds, Walnuts, Jaggery
+                </div>
+                <button type="button" class="recipe-toggle-btn" aria-expanded="false">
+                    <span>View Recipe Steps</span>
+                    <span class="recipe-arrow">&darr;</span>
+                </button>
+                <div class="recipe-steps-drawer" hidden>
+                    <ol class="recipe-steps-list">
+                        <li>Gently dry roast 1 cup Amulya Cashews, Almonds, and Walnuts for 4 minutes until fragrant.</li>
+                        <li>Coarsely grind the roasted nuts in a mixer jar without making them powdery.</li>
+                        <li>Melt 1/2 cup grated Amulya Desi Jaggery with 1 tbsp ghee in a non-stick pan.</li>
+                        <li>Fold the coarse nuts into the warm jaggery and roll into compact round ladoos.</li>
+                    </ol>
+                    <div class="recipe-shop-hook">
+                        <small>Ready to cook?</small>
+                        <a href="#bestsellers" class="recipe-hook-link">Add Amulya Dry Fruits &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe 2: High-Protein Quinoa Bowl -->
+            <div class="recipe-card" data-recipe-id="2">
+                <div class="recipe-header-bar">
+                    <span class="recipe-tag">VEGAN &bull; GLUTEN FREE</span>
+                    <span class="recipe-meta">&#9201; 20 mins &bull; Quick</span>
+                </div>
+                <h3 class="recipe-title">High-Protein Quinoa Bowl</h3>
+                <p class="recipe-summary">Steamed fluffy white quinoa tossed with roasted sunflower seeds, cucumber, avocado, and lemon-pink salt dressing.</p>
+                <div class="recipe-ingredients-preview">
+                    <strong>Hero Ingredients:</strong> Amulya White Quinoa, Sunflower Seeds, Pink Salt
+                </div>
+                <button type="button" class="recipe-toggle-btn" aria-expanded="false">
+                    <span>View Recipe Steps</span>
+                    <span class="recipe-arrow">&darr;</span>
+                </button>
+                <div class="recipe-steps-drawer" hidden>
+                    <ol class="recipe-steps-list">
+                        <li>Rinse 1 cup Amulya Organic Quinoa and simmer with 2 cups water for 12 minutes until fluffy.</li>
+                        <li>Lightly toast 2 tablespoons of Amulya Sunflower &amp; Chia seeds in a dry pan.</li>
+                        <li>Chop fresh cucumbers, cherry tomatoes, and mint leaves.</li>
+                        <li>Toss all ingredients together with cold-pressed olive oil, lemon juice, and a pinch of Amulya Himalayan Pink Rock Salt.</li>
+                    </ol>
+                    <div class="recipe-shop-hook">
+                        <small>Ready to cook?</small>
+                        <a href="#grains" class="recipe-hook-link">Get Organic Quinoa &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe 3: Detox Chia Cooler -->
+            <div class="recipe-card" data-recipe-id="3">
+                <div class="recipe-header-bar">
+                    <span class="recipe-tag">IMMUNITY BOOST</span>
+                    <span class="recipe-meta">&#9201; 5 mins &bull; Instant</span>
+                </div>
+                <h3 class="recipe-title">Detox Chia Cooler</h3>
+                <p class="recipe-summary">Soaked organic chia seeds suspended in cold coconut water, fresh mint leaves, lime juice, and fine black salt.</p>
+                <div class="recipe-ingredients-preview">
+                    <strong>Hero Ingredients:</strong> Amulya Chia Seeds, Kala Namak
+                </div>
+                <button type="button" class="recipe-toggle-btn" aria-expanded="false">
+                    <span>View Recipe Steps</span>
+                    <span class="recipe-arrow">&darr;</span>
+                </button>
+                <div class="recipe-steps-drawer" hidden>
+                    <ol class="recipe-steps-list">
+                        <li>Soak 1.5 tbsp Amulya Organic Chia seeds in 100ml warm water for 10 minutes until a gel forms.</li>
+                        <li>Add chilled coconut water or iced filtered water.</li>
+                        <li>Squeeze half a fresh lime and drop in bruised fresh mint sprigs.</li>
+                        <li>Stir in a quarter teaspoon of Amulya Kala Namak for electrolyte replenishing goodness.</li>
+                    </ol>
+                    <div class="recipe-shop-hook">
+                        <small>Ready to cook?</small>
+                        <a href="#seeds" class="recipe-hook-link">Get Organic Chia Seeds &rarr;</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recipe 4: Punjabi Dal Tadka -->
+            <div class="recipe-card" data-recipe-id="4">
+                <div class="recipe-header-bar">
+                    <span class="recipe-tag">HERITAGE CLASSIC</span>
+                    <span class="recipe-meta">&#9201; 25 mins &bull; Everyday</span>
+                </div>
+                <h3 class="recipe-title">Punjabi Dal Tadka</h3>
+                <p class="recipe-summary">Creamy unpolished Toor &amp; Moong dal tempered with golden desi ghee, jeera, aromatic hing, and roasted whole red chillies.</p>
+                <div class="recipe-ingredients-preview">
+                    <strong>Hero Ingredients:</strong> Amulya Unpolished Toor &amp; Moong Dal
+                </div>
+                <button type="button" class="recipe-toggle-btn" aria-expanded="false">
+                    <span>View Recipe Steps</span>
+                    <span class="recipe-arrow">&darr;</span>
+                </button>
+                <div class="recipe-steps-drawer" hidden>
+                    <ol class="recipe-steps-list">
+                        <li>Combine 1/2 cup Amulya Unpolished Toor Dal and 1/2 cup Moong Dal. Pressure cook with turmeric &amp; pink salt for 3 whistles.</li>
+                        <li>In a tadka pan, heat 2 tbsp desi ghee, crackle cumin seeds (jeera) and garlic cloves.</li>
+                        <li>Add chopped tomatoes, ginger, and a dash of Kashmiri degi mirch.</li>
+                        <li>Pour the sizzling tadka over the dal, garnish with coriander, and cover immediately to infuse aromas.</li>
+                    </ol>
+                    <div class="recipe-shop-hook">
+                        <small>Ready to cook?</small>
+                        <a href="#grains" class="recipe-hook-link">Get Unpolished Pulses &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     10. CUSTOMER TESTIMONIALS STRIP: 3 PASTEL CARDS (LAVENDER, PEACH, MINT)
+     ========================================================================= -->
+<section class="testimonials-strip-section" aria-label="Customer Reviews">
+    <div class="content-container">
+        <div class="section-title-wrap text-center">
+            <span class="roopak-eyebrow">VERIFIED BUYER EXPERIENCES</span>
+            <h2 class="roopak-section-title">Loved by Over <em>50,000+ Conscious Families</em></h2>
+            <p class="section-subtext">Real experiences from customers who chose pure, unpolished, and chemical-free pantry staples.</p>
+        </div>
+
+        <div class="testimonials-grid">
+            <!-- Testimonial 1: Lavender Pastel -->
+            <div class="testimonial-card test-lavender">
+                <div class="test-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="test-quote">
+                    &ldquo;The Kaju W240 and Iranian Mamra Almonds are the finest quality I have ever purchased in India. The airtight jars keep them crispy for months. Delivery in Kanpur took less than 18 hours!&rdquo;
+                </p>
+                <div class="test-author-block">
+                    <div class="author-avatar-badge">RS</div>
+                    <div>
+                        <strong class="author-name">Dr. Rashmi Sharma</strong>
+                        <span class="author-meta">Civil Lines, Kanpur &bull; Verified Buyer</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 2: Soft Peach Pastel -->
+            <div class="testimonial-card test-peach">
+                <div class="test-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="test-quote">
+                    &ldquo;Finding authentic unpolished Toor Dal that smells so earthy and cooks without that synthetic shiny slime was a true revelation. Their Himalayan Pink Salt jar has also now become an indispensable staple in our kitchen.&rdquo;
+                </p>
+                <div class="test-author-block">
+                    <div class="author-avatar-badge">SM</div>
+                    <div>
+                        <strong class="author-name">Sunil K. Mehrotra</strong>
+                        <span class="author-meta">Swaroop Nagar, Kanpur &bull; Verified Buyer</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Testimonial 3: Mint Pastel -->
+            <div class="testimonial-card test-mint">
+                <div class="test-rating">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="test-quote">
+                    &ldquo;Amulya's Amla Murabba in mishri reminds me of my grandmother's traditional jars. Perfectly soft yet firm amla berries soaked in pure rock sugar syrup, zero synthetic smell. Simply unmatched!&rdquo;
+                </p>
+                <div class="test-author-block">
+                    <div class="author-avatar-badge">PA</div>
+                    <div>
+                        <strong class="author-name">Pooja Agarwal</strong>
+                        <span class="author-meta">Lucknow, UP &bull; Verified Buyer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     11. VIDEO GALLERY / REELS SECTION: 5 VERTICAL 9:16 VIDEO CARDS
+     ========================================================================= -->
+<section class="roopak-videos-section" id="videos">
+    <div class="content-container">
+        <div class="section-title-wrap">
+            <span class="roopak-eyebrow">BEHIND THE HARVEST</span>
+            <h2 class="roopak-section-title">Explore Our <em>Latest Videos</em></h2>
+            <p class="section-subtext">Take an authentic behind-the-scenes look into our ethical sourcing, grading rituals, and kitchen tips.</p>
+        </div>
+
+        <div class="video-reels-grid">
+            <!-- Video 1 -->
+            <div class="video-reel-card" data-video-title="How We Grade Royal Jumbo Cashews W240" data-video-desc="Watch our artisan graders examine kernel size, count, and moisture content for pristine W240 standard.">
+                <div class="reel-aspect-container" style="background: linear-gradient(180deg, rgba(20,61,45,0.2) 0%, rgba(13,27,42,0.85) 100%), url('/images/cashew_bowl.png') center/cover;">
+                    <span class="reel-duration-tag">0:45</span>
+                    <div class="reel-play-button">
+                        <span>&#9654;</span>
+                    </div>
+                    <div class="reel-overlay-content">
+                        <h4>Grading Royal Jumbo Cashews W240</h4>
+                        <button type="button" class="watch-now-pill">WATCH NOW</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 2 -->
+            <div class="video-reel-card" data-video-title="The Journey of Himalayan Pink Rock Salt" data-video-desc="Inside subterranean rock mines where ancient mineral salt crystals are extracted without dynamiting or chemical washes.">
+                <div class="reel-aspect-container" style="background: linear-gradient(180deg, rgba(20,61,45,0.2) 0%, rgba(13,27,42,0.85) 100%), url('/images/pistachio_bowl.png') center/cover;">
+                    <span class="reel-duration-tag">0:52</span>
+                    <div class="reel-play-button">
+                        <span>&#9654;</span>
+                    </div>
+                    <div class="reel-overlay-content">
+                        <h4>Himalayan Pink Rock Salt Journey</h4>
+                        <button type="button" class="watch-now-pill">WATCH NOW</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 3 -->
+            <div class="video-reel-card" data-video-title="Why Unpolished Dal is 3x Healthier For Gut Flora" data-video-desc="Clinical nutritionist explains why retaining the natural dal skin provides prebiotic fiber for active digestion.">
+                <div class="reel-aspect-container" style="background: linear-gradient(180deg, rgba(20,61,45,0.2) 0%, rgba(13,27,42,0.85) 100%), url('/images/almond_bowl.png') center/cover;">
+                    <span class="reel-duration-tag">1:15</span>
+                    <div class="reel-play-button">
+                        <span>&#9654;</span>
+                    </div>
+                    <div class="reel-overlay-content">
+                        <h4>Why Unpolished Dal is 3x Healthier</h4>
+                        <button type="button" class="watch-now-pill">WATCH NOW</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 4 -->
+            <div class="video-reel-card" data-video-title="Traditional Amla Murabba: Cold Steeping Technique" data-video-desc="Discover how pure mishri crystals penetrate wild amla without high heat, preserving natural Vitamin C.">
+                <div class="reel-aspect-container" style="background: linear-gradient(180deg, rgba(20,61,45,0.2) 0%, rgba(13,27,42,0.85) 100%), url('/images/makhana_bowl.png') center/cover;">
+                    <span class="reel-duration-tag">0:58</span>
+                    <div class="reel-play-button">
+                        <span>&#9654;</span>
+                    </div>
+                    <div class="reel-overlay-content">
+                        <h4>Cold Steeping Amla in Mishri</h4>
+                        <button type="button" class="watch-now-pill">WATCH NOW</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Video 5 -->
+            <div class="video-reel-card" data-video-title="Top 4 Edible Seeds for Radiant Hair &amp; Skin" data-video-desc="A 40-second guide to combining flax, chia, sunflower and pumpkin seeds for natural biotin and omega-3.">
+                <div class="reel-aspect-container" style="background: linear-gradient(180deg, rgba(20,61,45,0.2) 0%, rgba(13,27,42,0.85) 100%), url('/images/walnut_bowl.png') center/cover;">
+                    <span class="reel-duration-tag">0:40</span>
+                    <div class="reel-play-button">
+                        <span>&#9654;</span>
+                    </div>
+                    <div class="reel-overlay-content">
+                        <h4>Top 4 Seeds for Hair &amp; Skin</h4>
+                        <button type="button" class="watch-now-pill">WATCH NOW</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     12. SEO RICH-TEXT KNOWLEDGE BLOCK: 2 & 3 COLUMN STRUCTURE WITH ARROWHEAD BULLETS
+     ========================================================================= -->
+<section class="seo-knowledge-section" aria-label="Heritage & Nutrition Knowledge">
+    <div class="content-container">
+        <div class="seo-card-wrap">
+            <div class="section-title-wrap">
+                <span class="roopak-eyebrow">FOOD PURITY SCIENCE</span>
+                <h2 class="roopak-section-title">The Kalash Amulya Heritage: <em>Purity, Authenticity &amp; Everyday Wellness</em></h2>
+                <p class="section-subtext">Everything you need to understand about certified unpolished staples, direct sourcing, and natural jar food preservation.</p>
+            </div>
+
+            <div class="seo-columns-grid">
+                <!-- Column 1 -->
+                <div class="seo-column">
+                    <h3 class="seo-subheading"><u>Why Choose Direct-Sourced Dry Fruits &amp; Certified Staples?</u></h3>
+                    <p class="seo-intro-p">
+                        Commercial bulk dry fruits are frequently treated with sulphur dioxide fumigation to artificially prolong shelf life and mask aging oils. Kalash Amulya bypasses multi-tier intermediaries to bring you whole, living kernels straight from source.
+                    </p>
+                    <ul class="seo-bullet-list">
+                        <li><span class="arrow-bullet">&#10148;</span> <strong>Zero Sulphur Fumigation:</strong> Preserves natural sweetness and prevents asthmatic reactions caused by industrial preservatives.</li>
+                        <li><span class="arrow-bullet">&#10148;</span> <strong>Maximum Kernel Integrity:</strong> Hand-graded W240 cashews and Mamra almonds guarantee full kernels with zero broken fragments.</li>
+                        <li><span class="arrow-bullet">&#10148;</span> <strong>Sealed in Food Grade Jars:</strong> Prevents rancidity of delicate natural unsaturated fatty acids and preserves distinct crunch.</li>
+                    </ul>
+                </div>
+
+                <!-- Column 2 -->
+                <div class="seo-column">
+                    <h3 class="seo-subheading"><u>The Science Behind 100% Unpolished Pulses &amp; Whole Grains</u></h3>
+                    <p class="seo-intro-p">
+                        To give lentils their uniform supermarket shine, industrial millers use water, marble dust, and edible oil polishers. This cosmetic process destroys the vital aleurone layer containing over 60% of the grain's natural nutrients.
+                    </p>
+                    <ul class="seo-bullet-list">
+                        <li><span class="arrow-bullet">&#10148;</span> <strong>Natural Prebiotic Fiber Intact:</strong> Unpolished lentils nourish beneficial gut microbiota, preventing post-prandial bloating.</li>
+                        <li><span class="arrow-bullet">&#10148;</span> <strong>Low Glycemic Index:</strong> Slow-digesting carbohydrates prevent rapid insulin spikes, making them ideal for diabetic management.</li>
+                        <li><span class="arrow-bullet">&#10148;</span> <strong>Bioavailable Micronutrients:</strong> Retains essential dietary iron, zinc, folic acid, and plant protein in every serving.</li>
+                    </ul>
+                </div>
+
+                <!-- Column 3 -->
+                <div class="seo-column">
+                    <h3 class="seo-subheading"><u>Ancient Himalayan Mineral Salts vs. Refined Table Salt</u></h3>
+                    <p class="seo-intro-p">
+                        Standard commercial table salt is heavily bleached and stripped of all minerals except sodium chloride, then laced with synthetic anti-caking compounds (E535 and E536) to prevent clumping in plastic dispensers.
+                    </p>
+                    <ul class="seo-bullet-list">
+                        <li><span class="arrow-bullet">&#10148;</span> <strong>Over 84 Natural Trace Elements:</strong> Rich in bio-available magnesium, potassium, and calcium directly from prehistoric sea beds.</li>
+                        <li><span class="arrow-bullet">&#10148;</span> <strong>Electrolyte Balance Restoration:</strong> Promotes cellular hydration without triggering excessive subcutaneous water retention.</li>
+                        <li><span class="arrow-bullet">&#10148;</span> <strong>Unrefined &amp; Chemical-Free:</strong> Pure stone-crushed crystalline salt with zero artificial anti-caking chemicals.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     13. FREQUENTLY ASKED QUESTIONS (FAQ): 2-COLUMN ACCORDION CARDS
+     ========================================================================= -->
+<section class="roopak-faq-section" id="faq">
+    <div class="content-container">
+        <div class="section-title-wrap text-center">
+            <span class="roopak-eyebrow">TRANSPARENT REASSURANCE</span>
+            <h2 class="roopak-section-title">Frequently Asked <em>Questions (FAQ)</em></h2>
+            <p class="section-subtext">Clear answers regarding our direct sourcing, jar packaging standards, and delivery schedules.</p>
+        </div>
+
+        <div class="faq-two-column-grid">
+            <!-- Left Column FAQs -->
+            <div class="faq-column">
+                <!-- FAQ Item 1 -->
+                <div class="faq-accordion-card">
+                    <button type="button" class="faq-question-btn" aria-expanded="false">
+                        <span>How does Kalash Amulya ensure dry fruit freshness and zero adulteration?</span>
+                        <span class="faq-indicator">+</span>
+                    </button>
+                    <div class="faq-answer-panel" hidden>
+                        <p>Every single batch undergoes a strict 5-stage mechanical quality audit in Kanpur: sorting for uniform size, moisture-testing below 5%, optical sorting for kernel flaws, and UV sanitation. Finally, products are sealed into food-grade cylindrical jars with chocolate brown screw caps to ensure unopened crispness for 9 months.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 2 -->
+                <div class="faq-accordion-card">
+                    <button type="button" class="faq-question-btn" aria-expanded="false">
+                        <span>What is the delivery timeframe for Kanpur and all-India destinations?</span>
+                        <span class="faq-indicator">+</span>
+                    </button>
+                    <div class="faq-answer-panel" hidden>
+                        <p>For Kanpur city addresses, orders received before 2:00 PM qualify for same-day evening delivery from our Dada Nagar facility. All other locations across India are dispatched within 24 hours through express courier services (Blue Dart, Delhivery) with typical transit times of 2 to 4 business days.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 3 -->
+                <div class="faq-accordion-card">
+                    <button type="button" class="faq-question-btn" aria-expanded="false">
+                        <span>Are your pulses and dry fruits certified by FSSAI?</span>
+                        <span class="faq-indicator">+</span>
+                    </button>
+                    <div class="faq-answer-panel" hidden>
+                        <p>Yes. Kalash Amulya operates strictly under Central FSSAI License No. 12721055000341. Our packaging and storage facilities in 173-B, Dada Nagar, Kanpur adhere to ISO 22000 and Good Manufacturing Practice (GMP) food safety standards.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column FAQs -->
+            <div class="faq-column">
+                <!-- FAQ Item 4 -->
+                <div class="faq-accordion-card">
+                    <button type="button" class="faq-question-btn" aria-expanded="false">
+                        <span>Can I place bulk or corporate gifting orders for festive events?</span>
+                        <span class="faq-indicator">+</span>
+                    </button>
+                    <div class="faq-answer-panel" hidden>
+                        <p>Absolutely. We curate custom festive dry fruit jar hampers, institutional wooden crates, and bulk raw supplies for weddings, corporate celebrations, and confectioneries. Click the &ldquo;Bulk Enquiry&rdquo; button in our header to receive custom quotes within 2 hours.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 5 -->
+                <div class="faq-accordion-card">
+                    <button type="button" class="faq-question-btn" aria-expanded="false">
+                        <span>Why do unpolished dals look less shiny than supermarket lentils?</span>
+                        <span class="faq-indicator">+</span>
+                    </button>
+                    <div class="faq-answer-panel" hidden>
+                        <p>Supermarket pulses are subjected to oil, talc stone, and water polishes to achieve an artificial gloss. This strips the vital aleurone skin. Kalash Amulya lentils retain their natural, matte, rustic appearance, ensuring full protein, fiber, and earthy flavour.</p>
+                    </div>
+                </div>
+
+                <!-- FAQ Item 6 -->
+                <div class="faq-accordion-card">
+                    <button type="button" class="faq-question-btn" aria-expanded="false">
+                        <span>Do your traditional preserves contain artificial colours or chemicals?</span>
+                        <span class="faq-indicator">+</span>
+                    </button>
+                    <div class="faq-answer-panel" hidden>
+                        <p>Never. Our Amla Murabba and digestive treats are cooked purely with whole winter amla berries and pure mishri (unrefined rock sugar). Natural preservation occurs via rock sugar saturation and natural citrus acidity without synthetic chemicals.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- =========================================================================
+     14 & 15. THE COMPLETE AMULYA EDIT CATALOG: INTERACTIVE FILTER & SEARCH
+     ========================================================================= -->
+<section class="roopak-catalog-section" id="shop">
+    <div class="content-container">
+        <div class="section-title-wrap">
+            <span class="roopak-eyebrow">THE AMULYA EDIT</span>
+            <h2 class="roopak-section-title">Complete <em>Harvest Storefront</em></h2>
+            <p class="section-subtext">Filter across categories, search for specific nutrition staples, or click any jar for detailed provenance.</p>
+        </div>
+
+        <!-- Catalog Toolbar -->
+        <div class="catalog-toolbar">
+            <div class="filter-pill-tabs" id="filterTabs">
+                <button type="button" class="filter-pill active" data-filter="All">All Items (21)</button>
+                <button type="button" class="filter-pill" data-filter="Dry Fruits">Dry Fruits</button>
+                <button type="button" class="filter-pill" data-filter="Seeds">Seeds</button>
+                <button type="button" class="filter-pill" data-filter="Salts & Seasonings">Salts &amp; Seasonings</button>
+                <button type="button" class="filter-pill" data-filter="Preserves & Sweets">Preserves &amp; Sweets</button>
+                <button type="button" class="filter-pill" data-filter="Grains & Pulses">Grains &amp; Pulses</button>
+            </div>
+
+            <div class="catalog-search-box">
+                <span class="catalog-search-icon">&#9906;</span>
+                <input type="search" id="productSearch" placeholder="Search our 21 pantry treasures..." aria-label="Search catalog products">
+            </div>
+        </div>
+
+                <!-- Dynamic Catalog Grid Rendered by site.js with Jar Styling -->
+        <div class="product-grid" id="products">
+            @foreach (var prod in allProducts)
+            {
+                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category">
+                    <div class="ribbon-tag">@prod.Tag</div>
+                    <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
+                        <div class="amulya-jar-showcase">
+                            <div class="amulya-jar-cap"></div>
+                            <div class="amulya-jar-neck"></div>
+                            <div class="amulya-jar-body">
+                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" onerror="this.src='/images/logo.png'" />
+                                <div class="amulya-jar-glare"></div>
+                                <div class="amulya-jar-sticker">
+                                    <span class="st-brand">AMULYA</span>
+                                    <span class="st-name">@prod.Name.ToUpperInvariant()</span>
+                                    <span class="st-pure">100% PURE &bull; FSSAI GRADE</span>
+                                </div>
+                            </div>
+                            <div class="amulya-jar-shadow"></div>
+                        </div>
+                        <span class="quick-view-badge">Quick View</span>
+                    </div>
+                    <div class="product-details-box">
+                        <div class="product-rating-row">
+                            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                            @if (prod.Stock <= 0)
+                            {
+                                <span class="stock-indicator-badge stock-badge-out">Out of Stock</span>
+                            }
+                            else if (prod.Stock <= 20)
+                            {
+                                <span class="stock-indicator-badge stock-badge-low">Only @prod.Stock left</span>
+                            }
+                            else
+                            {
+                                <span class="review-count">(@prod.Stock in stock)</span>
+                            }
+                        </div>
+                        <span class="product-cat-weight">@prod.Category &bull; @prod.Weight</span>
+                        <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
+                        <p class="product-brief">@prod.Description</p>
+                        <div class="product-pricing-row">
+                            <div class="price-stack">
+                                <span class="current-price">&#8377;@prod.Price</span>
+                                <span class="mrp-strikethrough">&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</span>
+                            </div>
+                            @if (prod.Stock > 0)
+                            {
+                                <button type="button" class="add-to-cart-pill" onclick="window.kalashAddToCart(@prod.Id)">
+                                    <span>+ ADD TO CART</span>
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="add-to-cart-pill out-of-stock-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
+                                    <span>OUT OF STOCK</span>
+                                </button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<script>
+    window.AMULYA_CATALOG = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(allProducts.Select(p => new {
+        id = p.Id,
+        name = p.Name,
+        category = p.Category,
+        price = p.Price,
+        mrp = p.Mrp > 0 ? p.Mrp : Math.Round(p.Price * 1.25m),
+        weight = p.Weight,
+        stock = p.Stock,
+        description = p.Description,
+        image = p.ImageUrl,
+        tag = p.Tag
+    })));
+</script>
+
+<!-- =========================================================================
+     NEWSLETTER SUBSCRIPTION STRIP
+     ========================================================================= -->
+<section class="roopak-newsletter-section">
+    <div class="content-container">
+        <div class="newsletter-card">
+            <div class="newsletter-copy">
+                <span class="roopak-eyebrow">AMULYA HERITAGE DISPATCH</span>
+                <h3>Stay Connected to <em>Uncompromised Purity</em></h3>
+                <p>Receive seasonal harvest notifications, traditional Ayurvedic kitchen recipes, and festive gifting offers directly in your inbox.</p>
+            </div>
+            <form id="newsletterForm" class="newsletter-form-row">
+                <input type="email" id="emailInput" required placeholder="Enter your email address" aria-label="Email for newsletter" />
+                <button type="submit" class="newsletter-btn">Subscribe &rarr;</button>
+            </form>
+            <p id="newsletterMessage" class="newsletter-status"></p>
+        </div>
+    </div>
+</section>

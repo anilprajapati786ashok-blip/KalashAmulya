@@ -1,0 +1,67 @@
+@{
+    ViewData["Title"] = "Customer Login - Kalash Amulya";
+    Layout = "_Layout";
+}
+
+<div class="auth-page-wrapper">
+    <div class="auth-card-container">
+        <div class="auth-header text-center">
+            <span class="roopak-eyebrow">WELCOME BACK TO PURITY</span>
+            <h1 class="auth-title">Customer Login</h1>
+            <p class="auth-subtitle">Access your saved addresses, track recent orders, and enjoy faster checkout.</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <div class="auth-alert auth-alert-danger" role="alert">
+                <span class="alert-icon">&#9888;</span>
+                <span>@ViewBag.Error</span>
+            </div>
+        }
+
+        <form method="post" action="/Account/Login" class="auth-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+            <div class="form-group">
+                <label for="emailInput">Registered Email Address *</label>
+                <input type="email" id="emailInput" name="email" required autocomplete="email" placeholder="e.g. rajesh.sharma@example.com" class="auth-input" />
+            </div>
+
+            <div class="form-group">
+                <div class="label-row">
+                    <label for="passwordInput">Password *</label>
+                    <a href="javascript:void(0)" onclick="alert('For demo access, please use Password@123')" class="forgot-link">Forgot Password?</a>
+                </div>
+                <input type="password" id="passwordInput" name="password" required autocomplete="current-password" placeholder="Enter your password" class="auth-input" />
+            </div>
+
+            <div class="form-check-row">
+                <label class="custom-checkbox-label">
+                    <input type="checkbox" name="rememberMe" value="true" checked />
+                    <span>Remember me on this browser (30 days)</span>
+                </label>
+            </div>
+
+            <button type="submit" class="auth-submit-btn">
+                <span>Sign In to Account</span>
+                <span class="btn-arrow">&rarr;</span>
+            </button>
+        </form>
+
+        <div class="demo-credentials-box">
+            <div class="demo-tag">&#9733; QUICK DEMO LOGIN</div>
+            <p><strong>Email:</strong> <code>rajesh.sharma@example.com</code></p>
+            <p><strong>Password:</strong> <code>Password@123</code></p>
+            <button type="button" class="btn-fill-demo" onclick="document.getElementById('emailInput').value='rajesh.sharma@example.com'; document.getElementById('passwordInput').value='Password@123';">
+                Auto-Fill Demo Credentials
+            </button>
+        </div>
+
+        <div class="auth-footer-nav text-center">
+            <p>Don't have an account yet? <a href="/Account/Register" class="auth-link">Create Account &rarr;</a></p>
+            <p><a href="/" class="return-home-link">&larr; Return to Home Storefront</a></p>
+        </div>
+    </div>
+</div>
+

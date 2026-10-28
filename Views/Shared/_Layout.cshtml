@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Kalash Amulya | Heritage Staples & Dry Fruits</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Design System Stylesheet -->
+    <link rel="stylesheet" href="~/Corporate-Redesign.css" />
+    <link rel="stylesheet" href="~/css/Corporate-Redesign.css" />
+</head>
+<body class="roopak-body">
+
+    <!-- ==================== TIER 1: DARK NAVY ANNOUNCEMENT BAR ==================== -->
+    <aside class="top-announcement-bar" role="region" aria-label="Announcement">
+        <div class="announcement-content">
+            <span class="announcement-star">★</span>
+            <span class="announcement-text">Pure Goodness Since Heritage &bull; Certified Organic &amp; Unpolished Staples &bull; Fast All-India &amp; Kanpur Local Delivery</span>
+            <span class="announcement-star">★</span>
+        </div>
+    </aside>
+
+    <!-- ==================== TIER 2: CLEAN WHITE MAIN HEADER ==================== -->
+    <header class="main-store-header">
+        <div class="header-container">
+            <!-- Brand Logo & Subtitle -->
+            <a href="/" class="brand-identity" aria-label="Kalash Amulya Home">
+                <img src="/images/logo.png" alt="Kalash Amulya Emblem" class="brand-logo-img" onerror="this.style.display='none'">
+                <div class="brand-text-block">
+                    <span class="brand-title">KALASH AMULYA</span>
+                    <span class="brand-subtitle">Goodness for Everyday Living</span>
+                </div>
+            </a>
+
+            <!-- Centered Pill Search Bar -->
+            <div class="header-search-wrapper">
+                <form class="header-search-form" id="globalSearchForm" onsubmit="event.preventDefault();">
+                    <span class="search-icon" aria-hidden="true">&#9906;</span>
+                    <input type="search" id="globalSearchInput" class="header-search-input" placeholder="Search dry fruits, unpolished pulses, seeds, murabba..." aria-label="Search products" autocomplete="off" />
+                    <button type="submit" id="globalSearchBtn" class="header-search-btn" aria-label="Submit Search">Search</button>
+                </form>
+            </div>
+
+            <!-- Right Utility Actions -->
+            <div class="header-utility-actions">
+                <!-- Bulk Enquiry Pill Button -->
+                <button type="button" class="utility-pill-btn bulk-btn" id="openBulkModalBtn">
+                    <span class="pill-dot"></span>
+                    <span>Bulk Enquiry</span>
+                </button>
+
+                <!-- My Account Link -->
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a href="/Account/Profile" class="utility-account-link auth-active" title="My Profile (@User.Identity.Name)">
+                        <svg class="utility-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span class="utility-account-text">Hi, @(User.Identity.Name?.Split(' ')[0] ?? "Profile")</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="/Account/Login" class="utility-account-link" title="Customer Login / Register">
+                        <svg class="utility-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        <span class="utility-account-text">Account</span>
+                    </a>
+                }
+
+                <!-- Interactive Bag / Cart Button with Live Counter Badge -->
+                <button type="button" class="utility-cart-btn" id="openCart" aria-label="Open Shopping Bag">
+                    <svg class="cart-svg-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <path d="M16 10a4 4 0 0 1-8 0"></path>
+                    </svg>
+                    <span class="cart-label">Bag</span>
+                    <span class="cart-badge-pill" id="cartCount">0</span>
+                </button>
+
+                <!-- Mobile Menu Hamburger -->
+                <button type="button" class="mobile-menu-trigger" id="menuToggle" aria-label="Toggle navigation menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ==================== TIER 3: HORIZONTAL STICKY CATEGORY NAV ==================== -->
+    <nav class="sticky-category-nav" id="stickyCategoryNav" aria-label="Category Navigation">
+        <div class="category-nav-container">
+            <ul class="category-nav-list" id="categoryNavList">
+                <li class="nav-item"><a href="/" class="nav-link active">Home</a></li>
+                <li class="nav-item"><a href="/Home/About" class="nav-link">About Us</a></li>
+                <li class="nav-item"><a href="/#dry-fruits" class="nav-link" data-category="Dry Fruits">Dry Fruits</a></li>
+                <li class="nav-item"><a href="/#seeds" class="nav-link" data-category="Seeds">Seeds</a></li>
+                <li class="nav-item"><a href="/#salts" class="nav-link" data-category="Salts & Seasonings">Salts &amp; Seasonings</a></li>
+                <li class="nav-item"><a href="/#preserves" class="nav-link" data-category="Preserves & Sweets">Preserves &amp; Sweets</a></li>
+                <li class="nav-item"><a href="/#grains" class="nav-link" data-category="Grains & Pulses">Grains &amp; Pulses</a></li>
+                <li class="nav-item"><a href="/#recipes" class="nav-link">Recipes</a></li>
+                <li class="nav-item"><a href="/Home/Contact" class="nav-link">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== MAIN CONTENT BODY ==================== -->
+    <main id="mainContent" role="main">
+        @RenderBody()
+    </main>
+
+    <!-- ==================== ROOPAK STORES 4-COLUMN MODERN FOOTER ==================== -->
+    <footer class="roopak-footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- Col 1: Get in Touch -->
+                <div class="footer-col footer-col-contact">
+                    <div class="footer-brand">
+                        <img src="/images/logo-inverted.png" alt="Kalash Amulya" class="footer-logo-img" onerror="this.src='/images/logo.png'">
+                        <div>
+                            <span class="footer-brand-title">KALASH AMULYA</span>
+                            <span class="footer-brand-tag">Goodness for Everyday Living</span>
+                        </div>
+                    </div>
+                    <p class="footer-description">
+                        Dedicated to uncompromised food purity, bringing direct-sourced dry fruits, certified unpolished pulses, and time-honoured Ayurvedic preserves to Indian kitchens.
+                    </p>
+                    <div class="footer-contact-details">
+                        <div class="contact-line">
+                            <span class="contact-icon">&#9906;</span>
+                            <span><strong>Registered Facility:</strong> 173-B, Dada Nagar Industrial Area, Kanpur-208022, Uttar Pradesh</span>
+                        </div>
+                        <div class="contact-line">
+                            <span class="contact-icon">&#9993;</span>
+                            <span><strong>Support:</strong> care@kalashamulya.com</span>
+                        </div>
+                        <div class="contact-line">
+                            <span class="contact-icon">&#9742;</span>
+                            <span><strong>Customer Care:</strong> +91 98765 43210 / +91 512 2987654</span>
+                        </div>
+                        <div class="fssai-badge">
+                            <span class="fssai-text">fssai</span>
+                            <span>Lic. No. 12721055000341 &bull; 100% Certified Food Grade</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Col 2: My Account -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">My Account</h4>
+                    <ul class="footer-links-list">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li><a href="/Account/Profile" class="footer-link">Customer Profile &amp; Orders</a></li>
+                            <li><a href="/Account/Logout" class="footer-link">Sign Out</a></li>
+                        }
+                        else
+                        {
+                            <li><a href="/Account/Login" class="footer-link">Customer Login</a></li>
+                            <li><a href="/Account/Register" class="footer-link">Register New Account</a></li>
+                        }
+                        <li><a href="javascript:void(0)" class="footer-link" onclick="if(window.kalashOpenCart) window.kalashOpenCart();">Shopping Bag / Cart</a></li>
+                        <li><a href="/Account/Profile" class="footer-link">Track Delivery Status</a></li>
+                        <li><a href="/Home/Contact" class="footer-link">Corporate &amp; Festive Gifting</a></li>
+                        <li><a href="/Home/Contact" class="footer-link">Kanpur Local Express Delivery</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Information -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Information</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="/Home/Privacy" class="footer-link">Privacy Policy</a></li>
+                        <li><a href="/Home/Privacy#terms" class="footer-link">Terms of Service</a></li>
+                        <li><a href="/Home/About#fssai" class="footer-link">FSSAI Compliance &amp; Purity</a></li>
+                        <li><a href="/Home/Privacy#shipping" class="footer-link">Shipping &amp; Returns Policy</a></li>
+                        <li><a href="/Home/About#unpolished" class="footer-link">Why 100% Unpolished Pulses?</a></li>
+                        <li><a href="/Home/About#quality" class="footer-link">Quality &amp; Lab Test Standards</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Quick Links -->
+                <div class="footer-col">
+                    <h4 class="footer-heading">Quick Links</h4>
+                    <ul class="footer-links-list">
+                        <li><a href="/" class="footer-link">Home Storefront</a></li>
+                        <li><a href="/#categories" class="footer-link">Shop by Category</a></li>
+                        <li><a href="/#bestsellers" class="footer-link">Bestseller Dry Fruits</a></li>
+                        <li><a href="/#recipes" class="footer-link">Healthy Kitchen Recipes</a></li>
+                        <li><a href="javascript:void(0)" class="footer-link" id="footerBulkBtn">Bulk &amp; Institutional Inquiries</a></li>
+                        <li><a href="/Home/Contact" class="footer-link">Contact Our Kanpur Team</a></li>
+                    </ul>
+
+                    <!-- Social Media Row -->
+                    <div class="footer-social-section">
+                        <span class="social-title">Connect With Us:</span>
+                        <div class="social-icons-row">
+                            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn yt" title="YouTube" aria-label="YouTube">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                            </a>
+                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn fb" title="Facebook" aria-label="Facebook">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            </a>
+                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn ig" title="Instagram" aria-label="Instagram">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            </a>
+                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="social-icon-btn li" title="LinkedIn" aria-label="LinkedIn">
+                                <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom-bar">
+                <div class="footer-bottom-content">
+                    <p class="copyright-text">
+                        &copy; 2026 Kalash Amulya Naturals Pvt. Ltd. All Rights Reserved. Kanpur, Uttar Pradesh, India.
+                    </p>
+                    <div class="footer-badges-list">
+                        <span>&#10003; 100% Unadulterated</span>
+                        <span>&#10003; FSSAI Standard</span>
+                        <span>&#10003; Secure Demo Checkout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ==================== CART DRAWER ==================== -->
+    <div class="cart-backdrop" id="cartBackdrop"></div>
+    <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping bag">
+        <div class="cart-head">
+            <div>
+                <p class="drawer-eyebrow">AMULYA PANTRY BAG</p>
+                <h3 class="drawer-title">Your Bag <span id="drawerCount">(0)</span></h3>
+            </div>
+            <button id="closeCart" class="close-btn" aria-label="Close cart">&times;</button>
+        </div>
+        
+        <!-- Free shipping meter indicator -->
+        <div class="free-shipping-banner" id="freeShippingBanner">
+            <span class="shipping-truck-icon">&#128666;</span>
+            <span id="shippingText">Free delivery on orders of &#8377;999 or more</span>
+        </div>
+
+        <div class="cart-items" id="cartItems"></div>
+        
+        <div class="cart-empty" id="cartEmpty">
+            <div class="empty-cart-icon">&#10047;</div>
+            <h4>Your pantry bag is empty.</h4>
+            <p>Explore our harvest of royal dry fruits, natural seeds, and unpolished pulses to fill your bag with goodness.</p>
+            <button class="btn btn-dark" id="continueShopping">Explore Collection &rarr;</button>
+        </div>
+        
+        <div class="cart-footer" id="cartFooter">
+            <div class="cart-subtotal-row">
+                <span>Estimated Subtotal</span>
+                <strong id="cartSubtotal">&#8377;0</strong>
+            </div>
+            <small class="cart-tax-note">Taxes calculated at checkout. Fast Kanpur &amp; All-India shipping.</small>
+            <button class="btn btn-dark checkout-demo" id="checkoutDemo">Proceed to Checkout &rarr;</button>
+            <p id="checkoutMessage"></p>
+        </div>
+    </aside>
+
+    <!-- ==================== QUICK VIEW MODAL ==================== -->
+    <div class="product-modal" id="productModal">
+        <div class="modal-backdrop" id="modalBackdrop"></div>
+        <div class="modal-card">
+            <button class="close-btn modal-close" id="closeModal" aria-label="Close modal">&times;</button>
+            <div class="modal-photo" id="modalPhoto"></div>
+            <div class="modal-info">
+                <span class="modal-badge-tag" id="modalTag">PREMIUM SELECTION</span>
+                <p class="modal-category-text" id="modalCategory"></p>
+                <h3 class="modal-product-title" id="modalName"></h3>
+                <p class="modal-product-desc" id="modalDescription"></p>
+                <div class="modal-price-row">
+                    <strong class="modal-price" id="modalPrice"></strong>
+                    <span class="modal-mrp" id="modalMrp"></span>
+                </div>
+                <div class="modal-assurance-strip">
+                    <span>&#10003; 100% Purity Verified</span>
+                    <span>&#10003; Food Grade Packaging</span>
+                </div>
+                <button class="btn btn-dark modal-add-btn" id="modalAdd">Add to Bag &rarr;</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== DEMO CHECKOUT OVERLAY ==================== -->
+    <div class="checkout-overlay" id="checkoutOverlay" aria-hidden="true">
+        <section class="checkout-panel" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+            <button type="button" class="close-btn checkout-close" id="closeCheckout" aria-label="Close checkout">&times;</button>
+
+            <div id="checkoutStepForm">
+                <p class="checkout-eyebrow">SECURE CHECKOUT DEMO</p>
+                <h2 id="checkoutTitle" class="checkout-main-title">Complete Your Order</h2>
+                <p class="checkout-intro">Enter your delivery details below to simulate an order placement.</p>
+
+                <div class="checkout-layout">
+                    <form id="checkoutForm" class="checkout-form">
+                        <h3 class="form-section-title">1. Delivery Address</h3>
+
+                        <label for="deliveryName">Full Name *</label>
+                        <input id="deliveryName" name="name" required maxlength="80" autocomplete="name" placeholder="e.g. Rajesh Kumar Sharma">
+
+                        <label for="deliveryMobile">Mobile Number *</label>
+                        <input id="deliveryMobile" name="mobile" type="tel" required pattern="[6-9][0-9]{9}" maxlength="10" inputmode="numeric" autocomplete="tel" placeholder="10-digit mobile number">
+
+                        <label for="deliveryHouse">Address (House No., Building, Area, Street) *</label>
+                        <textarea id="deliveryHouse" name="address" required maxlength="250" rows="3" autocomplete="street-address" placeholder="Flat / House No., Colony / Street, Landmark"></textarea>
+
+                        <label for="deliveryLandmark">Landmark (Optional)</label>
+                        <input id="deliveryLandmark" name="landmark" maxlength="100" placeholder="Nearby temple, school or market">
+
+                        <div class="checkout-two">
+                            <div>
+                                <label for="deliveryCity">City *</label>
+                                <input id="deliveryCity" name="city" required maxlength="60" autocomplete="address-level2" placeholder="e.g. Kanpur">
+                            </div>
+                            <div>
+                                <label for="deliveryState">State *</label>
+                                <input id="deliveryState" name="state" required maxlength="60" autocomplete="address-level1" placeholder="e.g. Uttar Pradesh">
+                            </div>
+                        </div>
+
+                        <label for="deliveryPin">PIN Code *</label>
+                        <input id="deliveryPin" name="pin" required pattern="[1-9][0-9]{5}" maxlength="6" inputmode="numeric" autocomplete="postal-code" placeholder="6-digit postal PIN">
+
+                        <h3 class="form-section-title payment-heading">2. Payment Method</h3>
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="COD" checked>
+                            <span><strong>Cash on Delivery (COD)</strong><small>Pay with cash or UPI upon home delivery</small></span>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="paymentMethod" value="UPI">
+                            <span><strong>Instant UPI / NetBanking (Demo)</strong><small>Simulated interface &bull; No actual money is debited</small></span>
+                        </label>
+
+                        <button class="btn btn-dark checkout-place" type="submit">Place Order &rarr;</button>
+                        <p class="checkout-disclaimer">Frontend demonstration only. This form simulates order processing without actual backend persistence.</p>
+                    </form>
+
+                    <aside class="checkout-summary">
+                        <h3 class="summary-title">Order Summary</h3>
+                        <div id="checkoutSummaryItems" class="checkout-items-list"></div>
+                        <div class="checkout-total-row"><span>Items Subtotal</span><strong id="checkoutSubtotal">&#8377;0</strong></div>
+                        <div class="checkout-total-row"><span>Standard Delivery</span><strong id="checkoutShipping">&#8377;50</strong></div>
+                        <p class="checkout-shipping-note">Free shipping automatically applied on orders &#8377;999 and above.</p>
+                        <div class="checkout-total-row checkout-grand"><span>Total Amount</span><strong id="checkoutGrandTotal">&#8377;0</strong></div>
+                    </aside>
+                </div>
+            </div>
+
+            <div id="checkoutSuccess" hidden class="checkout-success">
+                <div class="checkout-success-icon">&#10003;</div>
+                <p class="checkout-eyebrow">ORDER CONFIRMATION PREVIEW</p>
+                <h2 class="success-title">Order Placed Successfully!</h2>
+                <p id="checkoutSuccessMessage" class="success-message"></p>
+                <div class="order-id-box">
+                    <span>Demo Order Reference:</span>
+                    <strong id="checkoutOrderNumber"></strong>
+                </div>
+                <p class="checkout-disclaimer">This is a demonstration order simulation. A confirmation SMS/Email would be dispatched in a live production environment.</p>
+                <button type="button" class="btn btn-dark" id="doneCheckout">Continue Shopping &rarr;</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== BULK ENQUIRY MODAL ==================== -->
+    <div class="bulk-modal" id="bulkEnquiryModal">
+        <div class="modal-backdrop" id="bulkModalBackdrop"></div>
+        <div class="modal-card bulk-card">
+            <button class="close-btn modal-close" id="closeBulkModal" aria-label="Close bulk modal">&times;</button>
+            <div class="bulk-modal-header">
+                <span class="bulk-tag">B2B &amp; INSTITUTIONAL</span>
+                <h3>Bulk &amp; Corporate Gifting Enquiry</h3>
+                <p>Looking for wholesale quantities, festive hampers, or custom packaging? Submit your requirement for direct factory rates from Kanpur.</p>
+            </div>
+            <form id="bulkEnquiryForm" class="bulk-form">
+                <div class="bulk-fields-row">
+                    <div>
+                        <label for="bulkName">Contact Person Name *</label>
+                        <input type="text" id="bulkName" required placeholder="Your full name" />
+                    </div>
+                    <div>
+                        <label for="bulkCompany">Company / Organization</label>
+                        <input type="text" id="bulkCompany" placeholder="Business name (if applicable)" />
+                    </div>
+                </div>
+                <div class="bulk-fields-row">
+                    <div>
+                        <label for="bulkPhone">Phone / WhatsApp *</label>
+                        <input type="tel" id="bulkPhone" required placeholder="10-digit phone number" />
+                    </div>
+                    <div>
+                        <label for="bulkEmail">Email Address *</label>
+                        <input type="email" id="bulkEmail" required placeholder="name@company.com" />
+                    </div>
+                </div>
+                <div>
+                    <label for="bulkRequirement">Requirement Details *</label>
+                    <textarea id="bulkRequirement" rows="3" required placeholder="Specify products (e.g. Cashew W240 50kg, Festive Hampers 100 boxes) and estimated delivery date"></textarea>
+                </div>
+                <button type="submit" class="btn btn-dark bulk-submit-btn">Submit Bulk Request &rarr;</button>
+                <p id="bulkSuccessMessage" class="bulk-success-text" hidden>Thank you! Your bulk inquiry has been submitted. Our commercial desk will contact you within 2 hours.</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== VIDEO REELS POPUP MODAL ==================== -->
+    <div class="video-modal" id="videoModal">
+        <div class="modal-backdrop" id="videoBackdrop"></div>
+        <div class="modal-card video-card-modal">
+            <button class="close-btn modal-close" id="closeVideoModal" aria-label="Close video modal">&times;</button>
+            <div class="video-player-container">
+                <div class="video-placeholder-art" id="videoPlaceholder">
+                    <div class="video-play-ring">
+                        <span>&#9654;</span>
+                    </div>
+                    <h3 id="videoModalTitle">Video Presentation</h3>
+                    <p id="videoModalDesc">Kalash Amulya Heritage Quality Sourcing</p>
+                    <span class="video-live-badge">&#9679; Heritage Footage</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <!-- Scripts -->
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

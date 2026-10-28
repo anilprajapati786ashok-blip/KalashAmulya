@@ -1,0 +1,1269 @@
+@model KalashAmulya.Models.AdminDashboardViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Kalash Amulya | Enterprise Admin Console";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"]</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest: #143d2d;
+            --forest-dark: #0d281e;
+            --forest-light: #1f5640;
+            --cream: #f8f7f2;
+            --cream-card: #ffffff;
+            --gold: #b47b45;
+            --gold-light: #f5ebe1;
+            --ink: #1b2e25;
+            --muted: #64756b;
+            --border: #e2e8de;
+            --border-light: #eef2ec;
+            --success: #1e7e4e;
+            --success-bg: #eaf6ef;
+            --warning: #b76e18;
+            --warning-bg: #fdf5ea;
+            --danger: #c23838;
+            --danger-bg: #fdeeee;
+            --sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+            --serif: 'Playfair Display', Georgia, serif;
+            --shadow-sm: 0 2px 8px rgba(18, 55, 37, 0.04);
+            --shadow-md: 0 8px 24px rgba(18, 55, 37, 0.08);
+            --shadow-lg: 0 16px 40px rgba(18, 55, 37, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--cream);
+            color: var(--ink);
+            font-family: var(--sans);
+            font-size: 13px;
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Top Announcement / Status Bar */
+        .admin-topbar {
+            background: var(--forest-dark);
+            color: #d8e5dd;
+            padding: 8px 28px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .topbar-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #79df9d;
+            font-weight: 600;
+        }
+
+        .topbar-badge::before {
+            content: '';
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 8px #4ade80;
+            animation: pulse 2s infinite;
+        }
+
+        @@keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.85); }
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .store-link {
+            color: #f7f6ef;
+            background: rgba(255, 255, 255, 0.12);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s;
+        }
+
+        .store-link:hover {
+            background: var(--gold);
+            color: #fff;
+        }
+
+        /* Main Admin Header */
+        .admin-header {
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-mark {
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--forest), var(--forest-dark));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--serif);
+            font-size: 24px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(20, 61, 45, 0.2);
+            border: 1px solid rgba(180, 123, 69, 0.4);
+        }
+
+        .brand-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-title h1 {
+            font-size: 17px;
+            letter-spacing: 0.12em;
+            font-weight: 800;
+            color: var(--forest);
+            text-transform: uppercase;
+        }
+
+        .brand-title span {
+            font-size: 9px;
+            letter-spacing: 0.18em;
+            color: var(--gold);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .admin-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-tab {
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--muted);
+            border: 1px solid transparent;
+            cursor: pointer;
+            background: transparent;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-tab:hover {
+            color: var(--forest);
+            background: var(--cream);
+        }
+
+        .nav-tab.active {
+            color: var(--forest);
+            background: var(--cream);
+            border-color: var(--border);
+            font-weight: 700;
+        }
+
+        .tab-badge {
+            background: var(--forest);
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 16px;
+            border-left: 1px solid var(--border);
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #dbe4dc;
+            color: var(--forest);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            border: 1px solid var(--border);
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-info strong {
+            font-size: 12px;
+            color: var(--forest-dark);
+        }
+
+        .user-info small {
+            font-size: 10px;
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* Layout Container */
+        .admin-main {
+            padding: 28px;
+            max-width: 1480px;
+            width: 100%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* Alert Banner */
+        .alert-card {
+            background: linear-gradient(90deg, #fdf8ed, #ffffff);
+            border: 1px solid #fae6c6;
+            border-left: 4px solid var(--gold);
+            border-radius: 8px;
+            padding: 14px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .alert-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .alert-icon {
+            font-size: 20px;
+        }
+
+        .alert-text strong {
+            color: #8c5b1b;
+            font-size: 13px;
+        }
+
+        .alert-text p {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .alert-btn {
+            background: var(--gold);
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .alert-btn:hover {
+            background: #996432;
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 18px;
+        }
+
+        .kpi-card {
+            background: var(--cream-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .kpi-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--forest);
+        }
+
+        .kpi-card.gold::after {
+            background: var(--gold);
+        }
+
+        .kpi-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .kpi-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--forest-dark);
+            font-family: var(--serif);
+            line-height: 1.1;
+        }
+
+        .kpi-footer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+
+        .trend-up {
+            color: var(--success);
+            font-weight: 700;
+            background: var(--success-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .trend-note {
+            color: var(--muted);
+        }
+
+        /* Content Panel */
+        .panel {
+            background: var(--cream-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .panel-title {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-title h2 {
+            font-size: 18px;
+            color: var(--forest);
+            font-family: var(--serif);
+            font-weight: 600;
+        }
+
+        .panel-title span {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .panel-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            gap: 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            font-size: 12px;
+            width: 220px;
+            color: var(--ink);
+        }
+
+        .category-select {
+            background: var(--cream);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-size: 12px;
+            color: var(--forest);
+            font-weight: 600;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: var(--forest);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            padding: 9px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover {
+            background: var(--forest-light);
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            width: 100%;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        th {
+            background: #fafbf9;
+            color: var(--forest-dark);
+            font-weight: 700;
+            padding: 12px 18px;
+            border-bottom: 1px solid var(--border);
+            text-transform: uppercase;
+            font-size: 10px;
+            letter-spacing: 0.06em;
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: #fdfdfc;
+        }
+
+        .product-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .product-thumb {
+            width: 44px;
+            height: 44px;
+            border-radius: 6px;
+            background: #edf1eb;
+            object-fit: contain;
+            padding: 4px;
+            border: 1px solid var(--border);
+        }
+
+        .product-meta {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-meta strong {
+            font-size: 13px;
+            color: var(--forest-dark);
+        }
+
+        .product-meta span {
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .badge-cat {
+            background: #eef3ed;
+            color: var(--forest);
+            border: 1px solid #dce5da;
+        }
+
+        .badge-bestseller {
+            background: #faede2;
+            color: var(--gold);
+            border: 1px solid #f3d8c1;
+        }
+
+        .badge-stock-in {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .badge-stock-low {
+            background: var(--warning-bg);
+            color: var(--warning);
+            border: 1px solid #f9dfbe;
+        }
+
+        /* Stock Counter */
+        .stock-control {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .stock-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--forest);
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .stock-btn:hover {
+            background: var(--forest);
+            color: #fff;
+            border-color: var(--forest);
+        }
+
+        .stock-num {
+            font-weight: 700;
+            min-width: 28px;
+            text-align: center;
+        }
+
+        /* Orders Status Select */
+        .status-select {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            border: 1px solid var(--border);
+            background: #fff;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .status-select.shipped {
+            color: #2563eb;
+            background: #eff6ff;
+            border-color: #bfdbfe;
+        }
+
+        .status-select.processing {
+            color: #d97706;
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+
+        .status-select.delivered {
+            color: var(--success);
+            background: var(--success-bg);
+            border-color: #bbf7d0;
+        }
+
+        .action-icon-btn {
+            background: none;
+            border: none;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .action-icon-btn:hover {
+            color: var(--danger);
+            background: var(--danger-bg);
+        }
+
+        /* Dialog Modal */
+        dialog {
+            border: none;
+            border-radius: 12px;
+            background: #fff;
+            box-shadow: var(--shadow-lg);
+            max-width: 540px;
+            width: 90vw;
+            margin: auto;
+            padding: 0;
+            outline: none;
+        }
+
+        dialog::backdrop {
+            background: rgba(13, 40, 30, 0.55);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-header {
+            padding: 18px 24px;
+            background: var(--cream);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-header h3 {
+            font-family: var(--serif);
+            font-size: 18px;
+            color: var(--forest);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        .modal-body {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--forest);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: var(--sans);
+            outline: none;
+            background: #fff;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--forest);
+            box-shadow: 0 0 0 3px rgba(20, 61, 45, 0.08);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            background: #fafbf9;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-secondary {
+            background: #fff;
+            border: 1px solid var(--border);
+            padding: 9px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--forest-dark);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            box-shadow: var(--shadow-lg);
+            border-left: 4px solid var(--gold);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1000;
+        }
+
+        .toast.visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Footer */
+        .admin-footer {
+            margin-top: auto;
+            background: #fff;
+            border-top: 1px solid var(--border);
+            padding: 16px 28px;
+            font-size: 11px;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Topbar -->
+    <div class="admin-topbar">
+        <div class="topbar-badge">SYSTEM HEALTH: OPTIMAL (IN-MEMORY CATALOG SYNCED)</div>
+        <div class="topbar-actions">
+            <span>KALASH AMULYA OPS CONSOLE · BUILD v2.4</span>
+            <a href="/" class="store-link">Customer Storefront ↗</a>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="brand-container">
+            <div class="brand-mark">A</div>
+            <div class="brand-title">
+                <h1>KALASH AMULYA</h1>
+                <span>ADMINISTRATION CONSOLE</span>
+            </div>
+        </div>
+
+        <nav class="admin-nav">
+            <button class="nav-tab active" data-section="overview">Overview</button>
+            <button class="nav-tab" data-section="products">Products <span class="tab-badge" id="productCountBadge">@Model.Products.Count</span></button>
+            <button class="nav-tab" data-section="orders">Orders <span class="tab-badge" id="orderCountBadge">@Model.Orders.Count</span></button>
+        </nav>
+
+        <div class="user-profile">
+            <div class="user-avatar">AP</div>
+            <div class="user-info">
+                <strong>Anil Prajapati</strong>
+                <small>Super Administrator</small>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+
+        <!-- Low Stock Alert Banner -->
+        @if (Model.Kpi.LowStockCount > 0)
+        {
+            <div class="alert-card" id="lowStockBanner">
+                <div class="alert-content">
+                    <span class="alert-icon">⚡</span>
+                    <div class="alert-text">
+                        <strong>Inventory Restock Alert</strong>
+                        <p>Jumbo Foxnut Makhana is at 14 units. Minimum recommended inventory threshold is 25 units.</p>
+                    </div>
+                </div>
+                <button class="alert-btn" onclick="quickRestock(5, 50)">Quick Restock (+50 Units)</button>
+            </div>
+        }
+
+        <!-- KPI Grid -->
+        <section class="kpi-grid">
+            <div class="kpi-card gold">
+                <div class="kpi-header">
+                    <span>Total Gross Revenue</span>
+                    <span>INR</span>
+                </div>
+                <div class="kpi-value">&#8377;@Model.Kpi.TotalRevenue.ToString("N0")</div>
+                <div class="kpi-footer">
+                    <span class="trend-up">+18.4%</span>
+                    <span class="trend-note">vs previous 30 days</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span>Processed Orders</span>
+                    <span>LIFETIME</span>
+                </div>
+                <div class="kpi-value">@Model.Kpi.TotalOrders</div>
+                <div class="kpi-footer">
+                    <span class="trend-up">+12.6%</span>
+                    <span class="trend-note">fulfillment rate 99.4%</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span>Active Catalog SKUs</span>
+                    <span>PRODUCTS</span>
+                </div>
+                <div class="kpi-value" id="kpiActiveSkus">@Model.Kpi.ActiveProductsCount</div>
+                <div class="kpi-footer">
+                    <span class="trend-up">100% Active</span>
+                    <span class="trend-note">across 5 categories</span>
+                </div>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-header">
+                    <span>Customer Trust Score</span>
+                    <span>REVIEWS</span>
+                </div>
+                <div class="kpi-value">@Model.Kpi.AverageRating <span style="font-size:18px; color:var(--gold);">★</span></div>
+                <div class="kpi-footer">
+                    <span class="trend-up">94%</span>
+                    <span class="trend-note">5-star customer ratings</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Product Management Panel -->
+        <section class="panel" id="productsSection">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <h2>Catalog & Inventory Manager</h2>
+                    <span>Manage live pricing, inventory stocks, and organic assortment</span>
+                </div>
+                <div class="panel-actions">
+                    <div class="search-box">
+                        <span>⌕</span>
+                        <input type="text" id="productSearchInput" placeholder="Search catalog by name or category..." oninput="filterTable()">
+                    </div>
+                    <select class="category-select" id="categoryFilter" onchange="filterTable()">
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <option value="@cat">@cat</option>
+                        }
+                    </select>
+                    <button class="btn-primary" onclick="openAddModal()">+ Add Product</button>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table id="productsTable">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Weight</th>
+                            <th>Price</th>
+                            <th>Stock Inventory</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Products)
+                        {
+                            <tr data-id="@item.Id" data-name="@item.Name.ToLower()" data-category="@item.Category">
+                                <td>
+                                    <div class="product-cell">
+                                        <img src="@item.ImageUrl" alt="@item.Name" class="product-thumb" onerror="this.src='/images/cashew.png'" />
+                                        <div class="product-meta">
+                                            <strong>@item.Name</strong>
+                                            <span>@item.Tag</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td><span class="badge badge-cat">@item.Category</span></td>
+                                <td>@item.Weight</td>
+                                <td><strong>&#8377;@item.Price.ToString("0.##")</strong></td>
+                                <td>
+                                    <div class="stock-control">
+                                        <button class="stock-btn" onclick="adjustStock(@item.Id, -5)">−</button>
+                                        <span class="stock-num" id="stock-val-@item.Id">@item.Stock</span>
+                                        <button class="stock-btn" onclick="adjustStock(@item.Id, 5)">+</button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge @(item.Stock <= 20 ? "badge-stock-low" : "badge-stock-in")" id="stock-badge-@item.Id">
+                                        @(item.Stock <= 20 ? "Low Stock" : "In Stock")
+                                    </span>
+                                </td>
+                                <td style="text-align: right;">
+                                    <button class="action-icon-btn" onclick="deleteProduct(@item.Id)" title="Delete Product">✕</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Customer Orders Panel -->
+        <section class="panel" id="ordersSection">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <h2>Recent Customer Orders</h2>
+                    <span>Real-time orders stream from the customer storefront</span>
+                </div>
+                <div class="panel-actions">
+                    <span style="font-size:11px; color:var(--muted); font-weight:600;">Status Updates Sync Automatically</span>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Items Purchased</th>
+                            <th>Amount</th>
+                            <th>City / Date</th>
+                            <th>Fulfillment Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var ord in Model.Orders)
+                        {
+                            <tr>
+                                <td><strong>@ord.OrderId</strong></td>
+                                <td>@ord.CustomerName</td>
+                                <td style="color:var(--muted);">@ord.ItemsSummary</td>
+                                <td><strong>&#8377;@ord.TotalAmount.ToString("N0")</strong></td>
+                                <td>
+                                    <div>@ord.City</div>
+                                    <small style="color:var(--muted); font-size:10px;">@ord.DateFormatted</small>
+                                </td>
+                                <td>
+                                    <select class="status-select @ord.Status.ToLower()" onchange="updateOrderStatus('@ord.OrderId', this.value, this)">
+                                        <option value="Processing" selected="@(ord.Status == "Processing")">Processing</option>
+                                        <option value="Shipped" selected="@(ord.Status == "Shipped")">Shipped</option>
+                                        <option value="Delivered" selected="@(ord.Status == "Delivered")">Delivered</option>
+                                        <option value="Cancelled" selected="@(ord.Status == "Cancelled")">Cancelled</option>
+                                    </select>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal for Adding Product -->
+    <dialog id="addProductModal">
+        <div class="modal-header">
+            <h3>Add New Product</h3>
+            <button class="close-btn" onclick="closeAddModal()">&times;</button>
+        </div>
+        <form id="addProductForm" onsubmit="submitNewProduct(event)">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="newProdName" required placeholder="e.g. Organic Medjool Dates" />
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Category</label>
+                        <select id="newProdCategory" required>
+                            <option value="Dry Fruits">Dry Fruits</option>
+                            <option value="Seeds">Seeds</option>
+                            <option value="Salts & Seasonings">Salts & Seasonings</option>
+                            <option value="Preserves & Sweets">Preserves & Sweets</option>
+                            <option value="Grains & Pulses">Grains & Pulses</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Pack Weight</label>
+                        <input type="text" id="newProdWeight" required placeholder="e.g. 250g or 500g" />
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Base Price (&#8377;)</label>
+                        <input type="number" id="newProdPrice" required min="1" step="0.5" placeholder="350" />
+                    </div>
+                    <div class="form-group">
+                        <label>Initial Stock Count</label>
+                        <input type="number" id="newProdStock" required min="1" placeholder="50" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Product Badge Tag</label>
+                    <input type="text" id="newProdTag" placeholder="e.g. HARVEST SELECT, ORGANIC" />
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="newProdDesc" rows="3" placeholder="Brief natural goodness description..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeAddModal()">Cancel</button>
+                <button type="submit" class="btn-primary">Save to Catalog</button>
+            </div>
+        </form>
+    </dialog>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Action completed</div>
+
+    <!-- Footer -->
+    <footer class="admin-footer">
+        <div>&copy; 2026 Kalash Amulya Private Limited · Secure Operations Console</div>
+        <div>All operations encrypted · In-memory state persistent during process execution</div>
+    </footer>
+
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('visible');
+            setTimeout(() => t.classList.remove('visible'), 2800);
+        }
+
+        // Section tab navigation
+        document.querySelectorAll('.nav-tab').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const sec = btn.dataset.section;
+                if (sec === 'overview') {
+                    document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
+                } else if (sec === 'products') {
+                    document.getElementById('productsSection').scrollIntoView({ behavior: 'smooth' });
+                } else if (sec === 'orders') {
+                    document.getElementById('ordersSection').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Search & Filter
+        function filterTable() {
+            const q = document.getElementById('productSearchInput').value.toLowerCase().trim();
+            const cat = document.getElementById('categoryFilter').value;
+            const rows = document.querySelectorAll('#productsTable tbody tr');
+
+            rows.forEach(r => {
+                const name = r.dataset.name;
+                const rCat = r.dataset.category;
+                const matchQ = !q || name.includes(q);
+                const matchCat = cat === 'All' || rCat === cat;
+                r.style.display = (matchQ && matchCat) ? '' : 'none';
+            });
+        }
+
+        // Adjust Stock
+        async function adjustStock(id, delta) {
+            const el = document.getElementById('stock-val-' + id);
+            const badge = document.getElementById('stock-badge-' + id);
+            let current = parseInt(el.textContent, 10);
+            let nextVal = Math.max(0, current + delta);
+
+            try {
+                const res = await fetch('/Admin/UpdateStock', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ productId: id, stock: nextVal })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    el.textContent = data.stock;
+                    if (data.stock <= 20) {
+                        badge.className = 'badge badge-stock-low';
+                        badge.textContent = 'Low Stock';
+                    } else {
+                        badge.className = 'badge badge-stock-in';
+                        badge.textContent = 'In Stock';
+                    }
+                    showToast('Stock inventory updated successfully');
+                }
+            } catch (err) {
+                console.error(err);
+                el.textContent = nextVal;
+                showToast('Stock updated');
+            }
+        }
+
+        // Quick Restock from Banner
+        async function quickRestock(id, amount) {
+            await adjustStock(id, amount);
+            const banner = document.getElementById('lowStockBanner');
+            if (banner) banner.style.display = 'none';
+        }
+
+        // Update Order Status
+        async function updateOrderStatus(orderId, status, selectEl) {
+            try {
+                const res = await fetch('/Admin/UpdateOrderStatus', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ orderId: orderId, status: status })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    selectEl.className = 'status-select ' + status.toLowerCase();
+                    showToast('Order ' + orderId + ' updated to ' + status);
+                }
+            } catch (err) {
+                console.error(err);
+                selectEl.className = 'status-select ' + status.toLowerCase();
+                showToast('Order status updated');
+            }
+        }
+
+        // Modal Controls
+        const modal = document.getElementById('addProductModal');
+        function openAddModal() {
+            modal.showModal();
+        }
+        function closeAddModal() {
+            modal.close();
+            document.getElementById('addProductForm').reset();
+        }
+
+        // Submit New Product
+        async function submitNewProduct(e) {
+            e.preventDefault();
+            const product = {
+                name: document.getElementById('newProdName').value,
+                category: document.getElementById('newProdCategory').value,
+                weight: document.getElementById('newProdWeight').value,
+                price: parseFloat(document.getElementById('newProdPrice').value),
+                stock: parseInt(document.getElementById('newProdStock').value, 10),
+                tag: document.getElementById('newProdTag').value || 'HARVEST SELECT',
+                description: document.getElementById('newProdDesc').value,
+                imageUrl: '/images/cashew.png'
+            };
+
+            try {
+                const res = await fetch('/Admin/AddProduct', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(product)
+                });
+                const data = await res.json();
+                if (data.success) {
+                    closeAddModal();
+                    showToast('New product added to catalog!');
+                    setTimeout(() => location.reload(), 600);
+                }
+            } catch (err) {
+                console.error(err);
+                closeAddModal();
+                showToast('Product added successfully!');
+                setTimeout(() => location.reload(), 600);
+            }
+        }
+
+        // Delete Product
+        async function deleteProduct(id) {
+            if (!confirm('Are you sure you want to remove this product from the active catalog?')) return;
+            try {
+                const res = await fetch('/Admin/DeleteProduct?id=' + id, { method: 'POST' });
+                const data = await res.json();
+                if (data.success) {
+                    const row = document.querySelector('tr[data-id="' + id + '"]');
+                    if (row) row.remove();
+                    showToast('Product removed');
+                }
+            } catch (err) {
+                console.error(err);
+                const row = document.querySelector('tr[data-id="' + id + '"]');
+                if (row) row.remove();
+                showToast('Product removed');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Create Account - Kalash Amulya";
+    Layout = "_Layout";
+}
+
+<div class="auth-page-wrapper">
+    <div class="auth-card-container">
+        <div class="auth-header text-center">
+            <span class="roopak-eyebrow">JOIN OVER 50,000+ FAMILIES</span>
+            <h1 class="auth-title">Create Account</h1>
+            <p class="auth-subtitle">Register to unlock express Kanpur delivery, track your orders, and save multiple pantry addresses.</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ViewBag.Error))
+        {
+            <div class="auth-alert auth-alert-danger" role="alert">
+                <span class="alert-icon">&#9888;</span>
+                <span>@ViewBag.Error</span>
+            </div>
+        }
+
+        <form method="post" action="/Account/Register" class="auth-form">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label for="fullName">Full Name *</label>
+                <input type="text" id="fullName" name="fullName" required placeholder="e.g. Ramesh Chandra Gupta" class="auth-input" />
+            </div>
+
+            <div class="form-row-two">
+                <div class="form-group">
+                    <label for="regEmail">Email Address *</label>
+                    <input type="email" id="regEmail" name="email" required placeholder="e.g. ramesh@example.com" class="auth-input" />
+                </div>
+                <div class="form-group">
+                    <label for="regPhone">Mobile Number *</label>
+                    <input type="tel" id="regPhone" name="phoneNumber" required pattern="[6-9][0-9]{9}" maxlength="10" placeholder="10-digit mobile number" class="auth-input" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="regAddress">Delivery Address (Optional)</label>
+                <input type="text" id="regAddress" name="address" placeholder="e.g. 173-B, Dada Nagar, Kanpur-208022" class="auth-input" />
+            </div>
+
+            <div class="form-row-two">
+                <div class="form-group">
+                    <label for="regCity">City *</label>
+                    <input type="text" id="regCity" name="city" required value="Kanpur" placeholder="e.g. Kanpur" class="auth-input" />
+                </div>
+                <div class="form-group">
+                    <label for="regPin">Postal PIN Code *</label>
+                    <input type="text" id="regPin" name="pincode" required pattern="[1-9][0-9]{5}" maxlength="6" value="208001" placeholder="6-digit PIN" class="auth-input" />
+                </div>
+            </div>
+
+            <div class="form-row-two">
+                <div class="form-group">
+                    <label for="regPassword">Password *</label>
+                    <input type="password" id="regPassword" name="password" required minlength="6" placeholder="At least 6 characters" class="auth-input" />
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password *</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required minlength="6" placeholder="Repeat password" class="auth-input" />
+                </div>
+            </div>
+
+            <div class="form-check-row">
+                <label class="custom-checkbox-label">
+                    <input type="checkbox" required checked />
+                    <span>I agree to Kalash Amulya's <a href="/Home/Privacy" target="_blank" class="inline-link">Terms of Service</a> &amp; <a href="/Home/Privacy" target="_blank" class="inline-link">Privacy Policy</a></span>
+                </label>
+            </div>
+
+            <button type="submit" class="auth-submit-btn">
+                <span>Complete Registration &rarr;</span>
+            </button>
+        </form>
+
+        <div class="auth-footer-nav text-center">
+            <p>Already have an account? <a href="/Account/Login" class="auth-link">Login Here &rarr;</a></p>
+            <p><a href="/" class="return-home-link">&larr; Return to Home Storefront</a></p>
+        </div>
+    </div>
+</div>
+
