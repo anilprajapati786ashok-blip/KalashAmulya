@@ -379,26 +379,191 @@
         </div>
     </aside>
 
-    <!-- ==================== QUICK VIEW MODAL ==================== -->
-    <div class="product-modal" id="productModal">
+    <!-- ==================== 2-STAGE PRODUCT DETAILS MODAL ==================== -->
+    <div class="product-modal pdm-modal" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalName">
         <div class="modal-backdrop" id="modalBackdrop"></div>
-        <div class="modal-card">
-            <button class="close-btn modal-close" id="closeModal" aria-label="Close modal">&times;</button>
-            <div class="modal-photo" id="modalPhoto"></div>
-            <div class="modal-info">
-                <span class="modal-badge-tag" id="modalTag">PREMIUM SELECTION</span>
-                <p class="modal-category-text" id="modalCategory"></p>
-                <h3 class="modal-product-title" id="modalName"></h3>
-                <p class="modal-product-desc" id="modalDescription"></p>
-                <div class="modal-price-row">
-                    <strong class="modal-price" id="modalPrice"></strong>
-                    <span class="modal-mrp" id="modalMrp"></span>
+        <div class="pdm-dialog">
+            <button type="button" class="close-btn pdm-close-btn" id="closeModal" aria-label="Close Product Details">&times;</button>
+            
+            <div class="pdm-body">
+                <!-- LEFT COLUMN: JAR GALLERY & THUMBNAILS -->
+                <div class="pdm-left-col">
+                    <div class="pdm-gallery-stage">
+                        <button type="button" class="pdm-gallery-arrow pdm-arrow-prev" id="pdmGalleryPrev" aria-label="Previous image">&#10094;</button>
+                        
+                        <div class="pdm-main-view" id="pdmMainView">
+                            <!-- View 0: 3D Filled Glass Jar -->
+                            <div class="pdm-view-pane active" id="pdmView0">
+                                <div class="amulya-jar-showcase pdm-jar-showcase">
+                                    <div class="amulya-jar-cap"></div>
+                                    <div class="amulya-jar-neck"></div>
+                                    <div class="amulya-jar-body">
+                                        <img class="amulya-jar-fill" id="modalJarImg" src="/images/cashew.png" alt="Product Jar" onerror="this.src='/images/cashew.png'" />
+                                        <div class="amulya-jar-glare"></div>
+                                        <div class="amulya-jar-sticker">
+                                            <span class="st-brand">CHERUBIC AMULYA</span>
+                                            <span class="st-name" id="modalJarStickerName">CASHEWS</span>
+                                        </div>
+                                    </div>
+                                    <div class="amulya-jar-shadow"></div>
+                                </div>
+                            </div>
+                            
+                            <!-- View 1: Macro Harvest Texture -->
+                            <div class="pdm-view-pane" id="pdmView1">
+                                <div class="pdm-texture-box">
+                                    <img id="modalTextureImg" class="pdm-texture-img" src="/images/cashew.png" alt="Ingredient Texture" onerror="this.src='/images/cashew.png'" />
+                                    <span class="pdm-view-badge">100% Raw Harvest Texture</span>
+                                </div>
+                            </div>
+
+                            <!-- View 2: Quality & Airtight Seal Stamp -->
+                            <div class="pdm-view-pane" id="pdmView2">
+                                <div class="pdm-seal-box">
+                                    <div class="pdm-seal-emblem">&#128737;</div>
+                                    <h4 class="pdm-seal-heading">Airtight Food-Grade Seal</h4>
+                                    <p class="pdm-seal-desc">Hermetically induction-sealed to preserve natural volatile oils, rich aroma, crisp crunch, and zero-moisture shelf freshness.</p>
+                                    <div class="pdm-seal-cert">FSSAI Lic. 12718045000123 &bull; ISO 22000 Certified</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="button" class="pdm-gallery-arrow pdm-arrow-next" id="pdmGalleryNext" aria-label="Next image">&#10095;</button>
+                    </div>
+
+                    <!-- Thumbnails Selector Strip -->
+                    <div class="pdm-thumb-strip" id="pdmThumbStrip">
+                        <button type="button" class="pdm-thumb-btn active" data-view="0" id="pdmThumb0">
+                            <span class="pdm-thumb-icon">&#129474;</span>
+                            <span class="pdm-thumb-text">Jar View</span>
+                        </button>
+                        <button type="button" class="pdm-thumb-btn" data-view="1" id="pdmThumb1">
+                            <span class="pdm-thumb-icon">&#128269;</span>
+                            <span class="pdm-thumb-text">Purity Zoom</span>
+                        </button>
+                        <button type="button" class="pdm-thumb-btn" data-view="2" id="pdmThumb2">
+                            <span class="pdm-thumb-icon">&#9989;</span>
+                            <span class="pdm-thumb-text">Quality Seal</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="modal-assurance-strip">
-                    <span>&#10003; 100% Purity Verified</span>
-                    <span>&#10003; Food Grade Packaging</span>
+
+                <!-- RIGHT COLUMN: PRODUCT INFO, VARIANTS, ACTIONS & TABS -->
+                <div class="pdm-right-col">
+                    <!-- Rating Strip -->
+                    <div class="pdm-rating-row">
+                        <span class="pdm-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+                        <span class="pdm-rating-text">4.9 / 5.0 (128 Verified Customer Reviews)</span>
+                    </div>
+
+                    <!-- Title & Tag -->
+                    <h2 class="pdm-title" id="modalName">Royal Jumbo Cashews</h2>
+                    <div class="pdm-category-tag" id="modalCategory">Dry Fruits &bull; Unpolished Staples</div>
+
+                    <!-- Pricing Row -->
+                    <div class="pdm-price-row">
+                        <span class="pdm-price-main" id="modalPrice">&#8377;420.00</span>
+                        <span class="pdm-price-mrp" id="modalMrp">&#8377;520.00</span>
+                        <span class="pdm-price-tax">(INCL. OF ALL TAXES)</span>
+                        <span class="pdm-save-badge" id="modalSaveBadge">SAVE 20%</span>
+                    </div>
+
+                    <!-- Weight Variant Selector -->
+                    <div class="pdm-variant-section">
+                        <div class="pdm-variant-label">
+                            <strong>NETT WT:</strong> <span id="pdmSelectedWeightLabel">250 g</span>
+                        </div>
+                        <div class="pdm-weight-pills" id="pdmWeightPills">
+                            <button type="button" class="pdm-weight-pill" data-weight="200 g" data-multiplier="0.85">200 g</button>
+                            <button type="button" class="pdm-weight-pill active" data-weight="250 g" data-multiplier="1.0">250 g</button>
+                            <button type="button" class="pdm-weight-pill" data-weight="500 g" data-multiplier="1.9">500 g</button>
+                            <button type="button" class="pdm-weight-pill" data-weight="1 kg" data-multiplier="3.7">1 kg</button>
+                        </div>
+                    </div>
+
+                    <!-- Quantity Stepper & Wishlist Heart -->
+                    <div class="pdm-qty-wishlist-row">
+                        <div class="pdm-qty-stepper">
+                            <button type="button" class="pdm-qty-btn" id="pdmQtyMinus" aria-label="Decrease quantity">&minus;</button>
+                            <span class="pdm-qty-val" id="pdmQtyVal">1</span>
+                            <button type="button" class="pdm-qty-btn" id="pdmQtyPlus" aria-label="Increase quantity">&#43;</button>
+                        </div>
+                        <button type="button" class="pdm-wishlist-btn" id="pdmWishlistBtn" aria-label="Save to Wishlist" title="Save to Wishlist">
+                            <span class="pdm-heart-icon" id="pdmHeartIcon">&#9825;</span>
+                        </button>
+                    </div>
+
+                    <!-- Action Buttons: Add to Cart & Buy Now -->
+                    <div class="pdm-actions-row">
+                        <button type="button" class="btn pdm-btn-cart" id="modalAdd">
+                            Add To Cart
+                        </button>
+                        <button type="button" class="btn pdm-btn-buynow" id="modalBuyNow">
+                            Buy Now
+                        </button>
+                    </div>
+
+                    <!-- 3 Pastel Trust Badges -->
+                    <div class="pdm-trust-badges">
+                        <div class="pdm-trust-badge">
+                            <span class="pdm-trust-check">&#10004;</span>
+                            <span class="pdm-trust-text">FSSAI Certified Products</span>
+                        </div>
+                        <div class="pdm-trust-badge">
+                            <span class="pdm-trust-check">&#10004;</span>
+                            <span class="pdm-trust-text">Wide Direct Sourced Range</span>
+                        </div>
+                        <div class="pdm-trust-badge">
+                            <span class="pdm-trust-check">&#10004;</span>
+                            <span class="pdm-trust-text">Safe &amp; Secure Payment</span>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Tabs -->
+                    <div class="pdm-tabs-container">
+                        <div class="pdm-tabs-header" role="tablist">
+                            <button type="button" class="pdm-tab-nav active" data-tab="ingredient" role="tab">Ingredient</button>
+                            <button type="button" class="pdm-tab-nav" data-tab="description" role="tab">Description</button>
+                            <button type="button" class="pdm-tab-nav" data-tab="company" role="tab">Company Info</button>
+                            <button type="button" class="pdm-tab-nav" data-tab="reviews" role="tab">Reviews</button>
+                        </div>
+                        
+                        <div class="pdm-tab-content">
+                            <div class="pdm-tab-pane active" id="pdmPaneIngredient">
+                                <p id="modalIngredientText">100% Pure, Unpolished &amp; Direct-Harvest Staples. Zero artificial coloring, zero added preservatives, non-GMO. Packed in certified food-grade airtight containers.</p>
+                            </div>
+                            <div class="pdm-tab-pane" id="pdmPaneDescription">
+                                <p id="modalDescription"></p>
+                            </div>
+                            <div class="pdm-tab-pane" id="pdmPaneCompany">
+                                <p><strong>Cherubic Amulya Staples Division</strong><br>
+                                Kalash Group Heritage Since 1958<br>
+                                173-B Dada Nagar Industrial Area, Kanpur, Uttar Pradesh &bull; 208022<br>
+                                Central FSSAI License: <strong>12718045000123</strong> &bull; Customer Care: +91 512 2295000</p>
+                            </div>
+                            <div class="pdm-tab-pane" id="pdmPaneReviews">
+                                <div class="pdm-reviews-list">
+                                    <div class="pdm-review-item">
+                                        <div class="pdm-review-meta"><strong>Rajesh S. (Kanpur)</strong> <span class="pdm-review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+                                        <p>&ldquo;Super fresh, crisp texture and premium aroma right out of the jar. Outstanding quality!&rdquo;</p>
+                                    </div>
+                                    <div class="pdm-review-item">
+                                        <div class="pdm-review-meta"><strong>Meera K. (Lucknow)</strong> <span class="pdm-review-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span></div>
+                                        <p>&ldquo;The jar packaging keeps the aroma locked in beautifully. Far superior to generic market brands.&rdquo;</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button class="btn btn-dark modal-add-btn" id="modalAdd">Add to Bag &rarr;</button>
+            </div>
+
+            <!-- RELATED PRODUCTS CAROUSEL AT BOTTOM OF MODAL -->
+            <div class="pdm-related-section">
+                <h4 class="pdm-related-title">Complete Your Pantry With Related Staples</h4>
+                <div class="pdm-related-grid" id="pdmRelatedGrid">
+                    <!-- Dynamic mini items rendered via JS -->
+                </div>
             </div>
         </div>
     </div>

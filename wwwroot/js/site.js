@@ -418,12 +418,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const buttonHtml = isOutOfStock
                 ? '<button type="button" class="btn-outline-add btn-out-of-stock" disabled>OUT OF STOCK</button>'
-                : `<button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(${product.id})">ADD TO CART</button>`;
+                : `<button type="button" class="btn-outline-add" onclick="event.stopPropagation(); window.handleProductCardClick(${product.id})">ADD TO CART</button>`;
 
             return `
-            <div class="roopak-product-card" data-product-id="${product.id}" data-category="${product.category}">
+            <div class="roopak-product-card" data-product-id="${product.id}" data-category="${product.category}" onclick="window.handleProductCardClick(${product.id})" style="cursor: pointer;">
                 ${ribbonHtml}
-                <div class="product-thumb-box" onclick="window.kalashOpenModal(${product.id})">
+                <div class="product-thumb-box" onclick="event.stopPropagation(); window.handleProductCardClick(${product.id})">
                     <div class="amulya-jar-showcase">
                         <div class="amulya-jar-cap"></div>
                         <div class="amulya-jar-neck"></div>
@@ -439,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
                 <div class="product-details-box">
-                    <h3 class="product-name" onclick="window.kalashOpenModal(${product.id})">${product.name}</h3>
+                    <h3 class="product-name" onclick="event.stopPropagation(); window.handleProductCardClick(${product.id})">${product.name}</h3>
                     <div class="product-price-tag">&#8377;${priceFormatted}</div>
                     ${buttonHtml}
                 </div>
@@ -517,9 +517,10 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // ----------------------------------------------------------------------
+        // ----------------------------------------------------------------------
     // 5. CART OPERATIONS & UI SYNCHRONIZATION
     // ----------------------------------------------------------------------
-    function addToCart(productId) {
+    function addToCartWithDetails(productId, quantity = 1, weight = null, customPrice = null, openDrawer = true) {
         const product = productsData.find(p => p.id === parseInt(productId));
         if (!product) return;
 
@@ -528,31 +529,53 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const existing = cart.find(item => item.id === product.id);
+        const itemWeight = weight || product.weight || "250 g";
+        const itemPrice = customPrice !== null ? customPrice : parseFloat(product.price);
+
+        const existing = cart.find(item => item.id === product.id && item.weight === itemWeight);
         if (existing) {
-            if (product.stock !== undefined && existing.qty >= product.stock) {
+            if (product.stock !== undefined && (existing.qty + quantity) > product.stock) {
                 showToast(`Cannot add more than available stock (${product.stock}).`);
                 return;
             }
-            existing.qty += 1;
+            existing.qty += quantity;
         } else {
-            cart.push({ ...product, qty: 1 });
+            cart.push({
+                ...product,
+                price: itemPrice,
+                weight: itemWeight,
+                qty: quantity
+            });
         }
 
         saveCart();
         updateCartUI();
-        showToast(`Added ${product.name} to your bag`);
-        openCart();
+        showToast(`Added ${quantity} &times; ${product.name} (${itemWeight}) to your bag`);
+
+        if (openDrawer) {
+            openCart();
+        }
     }
 
-    function removeFromCart(productId) {
-        cart = cart.filter(item => item.id !== parseInt(productId));
+    // Default addToCart now routes to Product Details Modal per Directive
+    function addToCart(productId) {
+        handleProductCardClick(productId);
+    }
+
+    function removeFromCart(productId, weight = null) {
+        if (weight) {
+            cart = cart.filter(item => !(item.id === parseInt(productId) && item.weight === weight));
+        } else {
+            cart = cart.filter(item => item.id !== parseInt(productId));
+        }
         saveCart();
         updateCartUI();
     }
 
-    function updateQty(productId, delta) {
-        const item = cart.find(i => i.id === parseInt(productId));
+    function updateQty(productId, delta, weight = null) {
+        const item = weight 
+            ? cart.find(i => i.id === parseInt(productId) && i.weight === weight)
+            : cart.find(i => i.id === parseInt(productId));
         if (!item) return;
 
         const product = productsData.find(p => p.id === parseInt(productId));
@@ -563,7 +586,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         item.qty += delta;
         if (item.qty <= 0) {
-            removeFromCart(productId);
+            removeFromCart(productId, weight);
         } else {
             saveCart();
             updateCartUI();
@@ -604,12 +627,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         <img src="${item.image}" alt="${item.name}" onerror="this.src='/images/cashew.png'">
                         <div class="cart-item-info">
                             <h4>${item.name}</h4>
+                            <div style="font-size: 11px; color: #777; margin-bottom: 2px;">Nett Wt: <strong>${item.weight || '250 g'}</strong></div>
                             <p>&#8377;${item.price} &times; ${item.qty} = <strong>&#8377;${item.price * item.qty}</strong></p>
                             <div class="cart-item-controls">
-                                <button type="button" class="qty-btn" onclick="window.kalashUpdateQty(${item.id}, -1)">&minus;</button>
+                                <button type="button" class="qty-btn" onclick="window.kalashUpdateQty(${item.id}, -1, '${item.weight || ''}')">&minus;</button>
                                 <span>${item.qty}</span>
-                                <button type="button" class="qty-btn" onclick="window.kalashUpdateQty(${item.id}, 1)">&#43;</button>
-                                <button type="button" class="remove-btn" title="Remove item" onclick="window.kalashRemove(${item.id})">&times;</button>
+                                <button type="button" class="qty-btn" onclick="window.kalashUpdateQty(${item.id}, 1, '${item.weight || ''}')">&#43;</button>
+                                <button type="button" class="remove-btn" title="Remove item" onclick="window.kalashRemove(${item.id}, '${item.weight || ''}')">&times;</button>
                             </div>
                         </div>
                     </div>
@@ -643,53 +667,167 @@ document.addEventListener('DOMContentLoaded', function () {
     window.kalashRemove = removeFromCart;
 
     // ----------------------------------------------------------------------
-    // 6. QUICK VIEW MODAL
+    // 6. 2-STAGE PRODUCT DETAILS MODAL (ROOPAK DESIGN SYSTEM)
     // ----------------------------------------------------------------------
+    let currentGalleryIndex = 0;
+    let selectedModalWeight = "250 g";
+    let selectedModalQty = 1;
+    let selectedModalPrice = 0;
+    let isModalWishlisted = false;
+
+    function setGalleryView(index) {
+        currentGalleryIndex = (index + 3) % 3;
+        for (let i = 0; i < 3; i++) {
+            const pane = document.getElementById(`pdmView${i}`);
+            const thumb = document.getElementById(`pdmThumb${i}`);
+            if (pane) {
+                if (i === currentGalleryIndex) pane.classList.add('active');
+                else pane.classList.remove('active');
+            }
+            if (thumb) {
+                if (i === currentGalleryIndex) thumb.classList.add('active');
+                else thumb.classList.remove('active');
+            }
+        }
+    }
+
+    function setModalTab(tabName) {
+        const tabNavs = document.querySelectorAll('.pdm-tab-nav');
+        tabNavs.forEach(btn => {
+            if (btn.getAttribute('data-tab') === tabName) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+
+        const tabPanes = {
+            'ingredient': document.getElementById('pdmPaneIngredient'),
+            'description': document.getElementById('pdmPaneDescription'),
+            'company': document.getElementById('pdmPaneCompany'),
+            'reviews': document.getElementById('pdmPaneReviews')
+        };
+
+        for (const [key, el] of Object.entries(tabPanes)) {
+            if (el) {
+                if (key === tabName) el.classList.add('active');
+                else el.classList.remove('active');
+            }
+        }
+    }
+
+    function updateQtyDisplay() {
+        const qtyEl = document.getElementById('pdmQtyVal');
+        if (qtyEl) qtyEl.textContent = selectedModalQty;
+    }
+
+    function updateModalPricing() {
+        if (!selectedModalProduct) return;
+        const basePrice = parseFloat(selectedModalProduct.price);
+        const baseMrp = parseFloat(selectedModalProduct.mrp || Math.round(basePrice * 1.25));
+
+        const multipliers = {
+            '200 g': 0.85,
+            '250 g': 1.0,
+            '500 g': 1.9,
+            '1 kg': 3.7
+        };
+
+        const mult = multipliers[selectedModalWeight] || 1.0;
+        selectedModalPrice = Math.round(basePrice * mult);
+        const calcMrp = Math.round(baseMrp * mult);
+        const discountPct = Math.round(((calcMrp - selectedModalPrice) / calcMrp) * 100);
+
+        const priceEl = document.getElementById('modalPrice');
+        const mrpEl = document.getElementById('modalMrp');
+        const saveBadge = document.getElementById('modalSaveBadge');
+        const weightLabel = document.getElementById('pdmSelectedWeightLabel');
+
+        if (priceEl) priceEl.innerHTML = `&#8377;${selectedModalPrice.toFixed(2)}`;
+        if (mrpEl) mrpEl.innerHTML = `&#8377;${calcMrp.toFixed(2)}`;
+        if (saveBadge) saveBadge.textContent = `SAVE ${discountPct > 0 ? discountPct : 20}%`;
+        if (weightLabel) weightLabel.textContent = selectedModalWeight;
+    }
+
+    function renderModalRelatedProducts(currentId) {
+        const relatedGrid = document.getElementById('pdmRelatedGrid');
+        if (!relatedGrid) return;
+
+        const otherProds = productsData.filter(p => p.id !== currentId).slice(0, 4);
+        relatedGrid.innerHTML = otherProds.map(p => `
+            <div class="pdm-related-card" onclick="window.handleProductCardClick(${p.id})">
+                <img class="pdm-related-img" src="${p.image}" alt="${p.name}" onerror="this.src='/images/cashew.png'">
+                <div class="pdm-related-name" title="${p.name}">${p.name}</div>
+                <div class="pdm-related-price">&#8377;${parseFloat(p.price).toFixed(2)}</div>
+                <button type="button" class="pdm-related-btn">+ View</button>
+            </div>
+        `).join('');
+    }
+
     function openProductModal(productId) {
         const product = productsData.find(p => p.id === parseInt(productId));
         if (!product || !productModal) return;
         selectedModalProduct = product;
+        selectedModalQty = 1;
+        selectedModalWeight = "250 g";
+        isModalWishlisted = false;
 
-        if (modalCategory) modalCategory.textContent = `${product.category} · ${product.weight}`;
-        if (modalName) modalName.textContent = product.name;
-        if (modalDescription) modalDescription.textContent = product.description;
-        if (modalPrice) modalPrice.innerHTML = `&#8377;${product.price}`;
-        if (modalMrp) modalMrp.innerHTML = `&#8377;${product.mrp || Math.round(product.price * 1.25)}`;
-        if (modalTag) modalTag.textContent = product.tag || "PREMIUM SELECTION";
-        if (modalPhoto) {
-            modalPhoto.innerHTML = `
-                <div class="amulya-jar-showcase" style="margin: 0 auto;">
-                    <div class="amulya-jar-cap"></div>
-                    <div class="amulya-jar-neck"></div>
-                    <div class="amulya-jar-body">
-                        <img class="amulya-jar-fill" src="${product.image}" alt="${product.name}" onerror="this.src='/images/cashew.png'">
-                        <div class="amulya-jar-glare"></div>
-                        <div class="amulya-jar-sticker">
-                            <span class="st-brand">AMULYA</span>
-                            <span class="st-name">${product.name.toUpperCase()}</span>
-                            <span class="st-pure">100% PURE &bull; FSSAI GRADE</span>
-                        </div>
-                    </div>
-                    <div class="amulya-jar-shadow"></div>
-                </div>
-            `;
-            modalPhoto.style.backgroundImage = 'none';
-        }
+        // Reset gallery
+        setGalleryView(0);
 
+        // Populate images
+        const jarImg = document.getElementById('modalJarImg');
+        const jarStickerName = document.getElementById('modalJarStickerName');
+        const textureImg = document.getElementById('modalTextureImg');
+        if (jarImg) jarImg.src = product.image;
+        if (jarStickerName) jarStickerName.textContent = product.name.toUpperCase();
+        if (textureImg) textureImg.src = product.image;
+
+        // Populate titles & details
+        const nameEl = document.getElementById('modalName');
+        const catEl = document.getElementById('modalCategory');
+        const descEl = document.getElementById('modalDescription');
+        if (nameEl) nameEl.textContent = product.name;
+        if (catEl) catEl.textContent = `${product.category} • Unpolished Staples`;
+        if (descEl) descEl.textContent = product.description || "100% natural, unpolished and graded farm staples.";
+
+        // Reset Wishlist Heart
+        const heartEl = document.getElementById('pdmHeartIcon');
+        const wishlistBtn = document.getElementById('pdmWishlistBtn');
+        if (heartEl) heartEl.innerHTML = '&#9825;';
+        if (wishlistBtn) wishlistBtn.classList.remove('active');
+
+        // Reset Stepper
+        updateQtyDisplay();
+
+        // Reset Weight Pills
+        const weightPills = document.querySelectorAll('.pdm-weight-pill');
+        weightPills.forEach(pill => {
+            if (pill.getAttribute('data-weight') === '250 g') pill.classList.add('active');
+            else pill.classList.remove('active');
+        });
+
+        // Calculate Pricing
+        updateModalPricing();
+
+        // Reset Tab
+        setModalTab('ingredient');
+
+        // Render Related Products
+        renderModalRelatedProducts(product.id);
+
+        // Out of stock validation
+        const modalAddBtn = document.getElementById('modalAdd');
+        const modalBuyNowBtn = document.getElementById('modalBuyNow');
+        const isOutOfStock = product.stock !== undefined && product.stock <= 0;
         if (modalAddBtn) {
-            if (product.stock !== undefined && product.stock <= 0) {
-                modalAddBtn.disabled = true;
-                modalAddBtn.textContent = 'OUT OF STOCK';
-                modalAddBtn.style.opacity = '0.6';
-                modalAddBtn.style.cursor = 'not-allowed';
-            } else {
-                modalAddBtn.disabled = false;
-                modalAddBtn.textContent = 'Add to Bag';
-                modalAddBtn.style.opacity = '1';
-                modalAddBtn.style.cursor = 'pointer';
-            }
+            modalAddBtn.disabled = isOutOfStock;
+            modalAddBtn.textContent = isOutOfStock ? 'OUT OF STOCK' : 'Add To Cart';
+            modalAddBtn.style.opacity = isOutOfStock ? '0.6' : '1';
+        }
+        if (modalBuyNowBtn) {
+            modalBuyNowBtn.disabled = isOutOfStock;
+            modalBuyNowBtn.style.opacity = isOutOfStock ? '0.6' : '1';
         }
 
+        // Show Modal
         productModal.classList.add('open');
         document.body.style.overflow = 'hidden';
     }
@@ -699,19 +837,124 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflow = '';
     }
 
+    // Modal Interaction Listeners
     if (closeModalBtn) closeModalBtn.addEventListener('click', closeProductModal);
     if (modalBackdrop) modalBackdrop.addEventListener('click', closeProductModal);
 
+    const prevGalleryBtn = document.getElementById('pdmGalleryPrev');
+    const nextGalleryBtn = document.getElementById('pdmGalleryNext');
+    if (prevGalleryBtn) prevGalleryBtn.addEventListener('click', (e) => { e.stopPropagation(); setGalleryView(currentGalleryIndex - 1); });
+    if (nextGalleryBtn) nextGalleryBtn.addEventListener('click', (e) => { e.stopPropagation(); setGalleryView(currentGalleryIndex + 1); });
+
+    for (let i = 0; i < 3; i++) {
+        const thumb = document.getElementById(`pdmThumb${i}`);
+        if (thumb) thumb.addEventListener('click', (e) => { e.stopPropagation(); setGalleryView(i); });
+    }
+
+    const weightPillElements = document.querySelectorAll('.pdm-weight-pill');
+    weightPillElements.forEach(pill => {
+        pill.addEventListener('click', (e) => {
+            e.stopPropagation();
+            weightPillElements.forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            selectedModalWeight = pill.getAttribute('data-weight') || '250 g';
+            updateModalPricing();
+        });
+    });
+
+    const qtyMinusBtn = document.getElementById('pdmQtyMinus');
+    const qtyPlusBtn = document.getElementById('pdmQtyPlus');
+    if (qtyMinusBtn) {
+        qtyMinusBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (selectedModalQty > 1) {
+                selectedModalQty--;
+                updateQtyDisplay();
+            }
+        });
+    }
+    if (qtyPlusBtn) {
+        qtyPlusBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (selectedModalProduct && selectedModalProduct.stock && selectedModalQty >= selectedModalProduct.stock) {
+                showToast(`Cannot select more than available stock (${selectedModalProduct.stock}).`);
+                return;
+            }
+            selectedModalQty++;
+            updateQtyDisplay();
+        });
+    }
+
+    const modalWishlistBtn = document.getElementById('pdmWishlistBtn');
+    if (modalWishlistBtn) {
+        modalWishlistBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            isModalWishlisted = !isModalWishlisted;
+            const heartEl = document.getElementById('pdmHeartIcon');
+            if (isModalWishlisted) {
+                modalWishlistBtn.classList.add('active');
+                if (heartEl) heartEl.innerHTML = '&#9829;';
+                showToast(`Saved ${selectedModalProduct ? selectedModalProduct.name : 'item'} to your Cherubic Wishlist!`);
+            } else {
+                modalWishlistBtn.classList.remove('active');
+                if (heartEl) heartEl.innerHTML = '&#9825;';
+                showToast('Removed from your Wishlist.');
+            }
+        });
+    }
+
+    const pdmTabButtons = document.querySelectorAll('.pdm-tab-nav');
+    pdmTabButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const tab = btn.getAttribute('data-tab');
+            if (tab) setModalTab(tab);
+        });
+    });
+
+    // Stage 3 Action 1: Add to Cart (adds to bag and opens Slide-in Cart Drawer)
     if (modalAddBtn) {
-        modalAddBtn.addEventListener('click', () => {
+        modalAddBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (selectedModalProduct) {
-                addToCart(selectedModalProduct.id);
+                addToCartWithDetails(
+                    selectedModalProduct.id,
+                    selectedModalQty,
+                    selectedModalWeight,
+                    selectedModalPrice,
+                    true // Opens Slide-in Cart Drawer
+                );
                 closeProductModal();
             }
         });
     }
 
-    window.kalashOpenModal = openProductModal;
+    // Stage 3 Action 2: Buy Now (adds to bag and immediately opens Complete Your Order Modal)
+    const modalBuyNowBtn = document.getElementById('modalBuyNow');
+    if (modalBuyNowBtn) {
+        modalBuyNowBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (selectedModalProduct) {
+                addToCartWithDetails(
+                    selectedModalProduct.id,
+                    selectedModalQty,
+                    selectedModalWeight,
+                    selectedModalPrice,
+                    false // Do not open drawer
+                );
+                closeProductModal();
+                openCheckout(); // Immediately open Complete Your Order Modal
+            }
+        });
+    }
+
+    // Stage 1: Storefront Trigger (Clicking any card or ADD TO CART button opens Product Details Modal)
+    function handleProductCardClick(productId) {
+        openProductModal(productId);
+    }
+    window.handleProductCardClick = handleProductCardClick;
+    window.openProductDetailModal = handleProductCardClick;
+    window.kalashOpenModal = handleProductCardClick;
 
     // ----------------------------------------------------------------------
     // 7. DEMO CHECKOUT FLOW

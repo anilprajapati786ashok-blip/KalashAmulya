@@ -319,9 +319,9 @@
                 <div class="bestsellers-grid">
             @foreach (var prod in bestsellersList)
             {
-                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category">
+                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category" onclick="window.handleProductCardClick && window.handleProductCardClick(@prod.Id)" style="cursor: pointer;">
                     @if (prod.Tag?.ToUpper().Contains("POPULAR") == true || prod.Tag?.ToUpper().Contains("BESTSELLER") == true || prod.Tag?.ToUpper().Contains("ROYAL") == true) { <div class="card-ribbon-popular">Most Popular</div> }
-                    <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
+                    <div class="product-thumb-box" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">
                         <div class="amulya-jar-showcase">
                             <div class="amulya-jar-cap"></div>
                             <div class="amulya-jar-neck"></div>
@@ -337,11 +337,11 @@
                         </div>
                     </div>
                     <div class="product-details-box">
-                        <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
+                        <h3 class="product-name" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">@prod.Name</h3>
                         <div class="product-price-tag">&#8377;@prod.Price.ToString("0.00")</div>
                         @if (prod.Stock > 0)
                         {
-                            <button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(@prod.Id)">
+                            <button type="button" class="btn-outline-add" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">
                                 ADD TO CART
                             </button>
                         }
@@ -420,7 +420,7 @@
                                 </div>
                                 @if (prod.Stock > 0)
                                 {
-                                    <button type="button" class="mini-add-btn" onclick="window.kalashAddToCart(@prod.Id)">+ ADD</button>
+                                    <button type="button" class="mini-add-btn" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">+ ADD</button>
                                 }
                                 else
                                 {
@@ -477,7 +477,7 @@
                                 </div>
                                 @if (prod.Stock > 0)
                                 {
-                                    <button type="button" class="mini-add-btn" onclick="window.kalashAddToCart(@prod.Id)">+ ADD</button>
+                                    <button type="button" class="mini-add-btn" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">+ ADD</button>
                                 }
                                 else
                                 {
@@ -526,9 +526,9 @@
         <div class="bestsellers-grid staples-4-grid">
             @foreach (var prod in staplesList)
             {
-                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category">
+                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category" onclick="window.handleProductCardClick && window.handleProductCardClick(@prod.Id)" style="cursor: pointer;">
                     @if (prod.Tag?.ToUpper().Contains("POPULAR") == true || prod.Tag?.ToUpper().Contains("BESTSELLER") == true || prod.Tag?.ToUpper().Contains("ROYAL") == true) { <div class="card-ribbon-popular">Most Popular</div> }
-                    <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
+                    <div class="product-thumb-box" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">
                         <div class="amulya-jar-showcase">
                             <div class="amulya-jar-cap"></div>
                             <div class="amulya-jar-neck"></div>
@@ -544,11 +544,11 @@
                         </div>
                     </div>
                     <div class="product-details-box">
-                        <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
+                        <h3 class="product-name" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">@prod.Name</h3>
                         <div class="product-price-tag">&#8377;@prod.Price.ToString("0.00")</div>
                         @if (prod.Stock > 0)
                         {
-                            <button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(@prod.Id)">
+                            <button type="button" class="btn-outline-add" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">
                                 ADD TO CART
                             </button>
                         }
@@ -579,9 +579,9 @@
         <div class="bestsellers-grid staples-4-grid">
             @foreach (var prod in seedsList)
             {
-                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category">
+                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category" onclick="window.handleProductCardClick && window.handleProductCardClick(@prod.Id)" style="cursor: pointer;">
                     @if (prod.Tag?.ToUpper().Contains("POPULAR") == true || prod.Tag?.ToUpper().Contains("BESTSELLER") == true || prod.Tag?.ToUpper().Contains("ROYAL") == true) { <div class="card-ribbon-popular">Most Popular</div> }
-                    <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
+                    <div class="product-thumb-box" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">
                         <div class="amulya-jar-showcase">
                             <div class="amulya-jar-cap"></div>
                             <div class="amulya-jar-neck"></div>
@@ -597,11 +597,11 @@
                         </div>
                     </div>
                     <div class="product-details-box">
-                        <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
+                        <h3 class="product-name" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">@prod.Name</h3>
                         <div class="product-price-tag">&#8377;@prod.Price.ToString("0.00")</div>
                         @if (prod.Stock > 0)
                         {
-                            <button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(@prod.Id)">
+                            <button type="button" class="btn-outline-add" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">
                                 ADD TO CART
                             </button>
                         }
@@ -1069,9 +1069,9 @@
         <div class="product-grid" id="products">
             @foreach (var prod in allProducts)
             {
-                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category">
+                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category" onclick="window.handleProductCardClick && window.handleProductCardClick(@prod.Id)" style="cursor: pointer;">
                     @if (prod.Tag?.ToUpper().Contains("POPULAR") == true || prod.Tag?.ToUpper().Contains("BESTSELLER") == true || prod.Tag?.ToUpper().Contains("ROYAL") == true) { <div class="card-ribbon-popular">Most Popular</div> }
-                    <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
+                    <div class="product-thumb-box" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">
                         <div class="amulya-jar-showcase">
                             <div class="amulya-jar-cap"></div>
                             <div class="amulya-jar-neck"></div>
@@ -1087,11 +1087,11 @@
                         </div>
                     </div>
                     <div class="product-details-box">
-                        <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
+                        <h3 class="product-name" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">@prod.Name</h3>
                         <div class="product-price-tag">&#8377;@prod.Price.ToString("0.00")</div>
                         @if (prod.Stock > 0)
                         {
-                            <button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(@prod.Id)">
+                            <button type="button" class="btn-outline-add" onclick="event.stopPropagation(); window.handleProductCardClick && window.handleProductCardClick(@prod.Id)">
                                 ADD TO CART
                             </button>
                         }
