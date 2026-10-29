@@ -406,56 +406,42 @@ document.addEventListener('DOMContentLoaded', function () {
 
         productsContainer.innerHTML = filtered.map(product => {
             const isOutOfStock = product.stock !== undefined && product.stock <= 0;
-            const isLowStock = product.stock !== undefined && product.stock > 0 && product.stock <= 20;
-            const stockBadge = isOutOfStock
-                ? '<span class="stock-indicator-badge stock-badge-out" style="display:inline-block; font-size:10px; font-weight:700; color:#c0392b; background:#fde8e8; padding:2px 6px; border-radius:4px; margin-left:6px;">Out of Stock</span>'
-                : (isLowStock
-                    ? `<span class="stock-indicator-badge stock-badge-low" style="display:inline-block; font-size:10px; font-weight:700; color:#d97706; background:#fef3c7; padding:2px 6px; border-radius:4px; margin-left:6px;">Only ${product.stock} left</span>`
-                    : (product.stock !== undefined ? `<span class="review-count">(${product.stock} in stock)</span>` : '<span class="review-count">(4.9)</span>'));
+            const priceFormatted = parseFloat(product.price).toFixed(2);
+            const isPopular = product.tag && (
+                product.tag.toUpperCase().includes('POPULAR') || 
+                product.tag.toUpperCase().includes('BESTSELLER') ||
+                product.tag.toUpperCase().includes('ROYAL')
+            );
+            const ribbonHtml = isPopular 
+                ? '<div class="card-ribbon-popular">Most Popular</div>' 
+                : '';
 
             const buttonHtml = isOutOfStock
-                ? `<button type="button" class="add-to-cart-pill out-of-stock-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
-                    <span>OUT OF STOCK</span>
-                   </button>`
-                : `<button type="button" class="add-to-cart-pill" onclick="window.kalashAddToCart(${product.id})">
-                    <span>+ ADD TO CART</span>
-                   </button>`;
+                ? '<button type="button" class="btn-outline-add btn-out-of-stock" disabled>OUT OF STOCK</button>'
+                : `<button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(${product.id})">ADD TO CART</button>`;
 
             return `
-            <div class="roopak-product-card" data-product-id="${product.id}">
-                <div class="ribbon-tag">${product.tag || 'PREMIUM'}</div>
+            <div class="roopak-product-card" data-product-id="${product.id}" data-category="${product.category}">
+                ${ribbonHtml}
                 <div class="product-thumb-box" onclick="window.kalashOpenModal(${product.id})">
                     <div class="amulya-jar-showcase">
                         <div class="amulya-jar-cap"></div>
                         <div class="amulya-jar-neck"></div>
                         <div class="amulya-jar-body">
-                            <img class="amulya-jar-fill" src="${product.image}" alt="${product.name}" onerror="this.src='/images/logo.png'" loading="lazy">
+                            <img class="amulya-jar-fill" src="${product.image}" alt="${product.name}" onerror="this.src='/images/cashew.png'" loading="lazy">
                             <div class="amulya-jar-glare"></div>
                             <div class="amulya-jar-sticker">
                                 <span class="st-brand">AMULYA</span>
                                 <span class="st-name">${product.name.toUpperCase()}</span>
-                                <span class="st-pure">100% PURE &bull; FSSAI GRADE</span>
                             </div>
                         </div>
                         <div class="amulya-jar-shadow"></div>
                     </div>
-                    <span class="quick-view-badge">Quick View</span>
                 </div>
                 <div class="product-details-box">
-                    <div class="product-rating-row">
-                        <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                        ${stockBadge}
-                    </div>
-                    <span class="product-cat-weight">${product.category} &bull; ${product.weight}</span>
                     <h3 class="product-name" onclick="window.kalashOpenModal(${product.id})">${product.name}</h3>
-                    <p class="product-brief">${product.description}</p>
-                    <div class="product-pricing-row">
-                        <div class="price-stack">
-                            <span class="current-price">&#8377;${product.price}</span>
-                            <span class="mrp-strikethrough">&#8377;${product.mrp || Math.round(product.price * 1.25)}</span>
-                        </div>
-                        ${buttonHtml}
-                    </div>
+                    <div class="product-price-tag">&#8377;${priceFormatted}</div>
+                    ${buttonHtml}
                 </div>
             </div>
             `;
@@ -590,6 +576,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (cartCountEl) cartCountEl.textContent = totalCount;
         if (drawerCountEl) drawerCountEl.textContent = `(${totalCount})`;
+        const bottomCartCountEl = document.getElementById('bottomCartCount');
+        if (bottomCartCountEl) bottomCartCountEl.textContent = totalCount;
         if (cartSubtotalEl) cartSubtotalEl.innerHTML = `&#8377;${subtotal}`;
 
         if (shippingText) {
@@ -613,7 +601,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (cartItemsEl) {
                 cartItemsEl.innerHTML = cart.map(item => `
                     <div class="cart-item">
-                        <img src="${item.image}" alt="${item.name}" onerror="this.src='/images/logo.png'">
+                        <img src="${item.image}" alt="${item.name}" onerror="this.src='/images/cashew.png'">
                         <div class="cart-item-info">
                             <h4>${item.name}</h4>
                             <p>&#8377;${item.price} &times; ${item.qty} = <strong>&#8377;${item.price * item.qty}</strong></p>
@@ -674,7 +662,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <div class="amulya-jar-cap"></div>
                     <div class="amulya-jar-neck"></div>
                     <div class="amulya-jar-body">
-                        <img class="amulya-jar-fill" src="${product.image}" alt="${product.name}" onerror="this.src='/images/logo.png'">
+                        <img class="amulya-jar-fill" src="${product.image}" alt="${product.name}" onerror="this.src='/images/cashew.png'">
                         <div class="amulya-jar-glare"></div>
                         <div class="amulya-jar-sticker">
                             <span class="st-brand">AMULYA</span>
@@ -973,6 +961,62 @@ document.addEventListener('DOMContentLoaded', function () {
             })
             .catch(err => console.log('Catalog sync error:', err));
     }
+
+
+    // ----------------------------------------------------------------------
+    // MOBILE SLIDING DRAWER LOGIC
+    // ----------------------------------------------------------------------
+    const mobileMenuOpenBtn = document.getElementById('mobileMenuOpen');
+    const mobileNavCloseBtn = document.getElementById('mobileNavClose');
+    const mobileNavDrawer = document.getElementById('mobileNavDrawer');
+    const mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+    const mobileBulkBtn = document.getElementById('mobileBulkBtn');
+
+    function openMobileNav() {
+        if (mobileNavDrawer) mobileNavDrawer.classList.add('open');
+        if (mobileNavBackdrop) mobileNavBackdrop.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileNav() {
+        if (mobileNavDrawer) mobileNavDrawer.classList.remove('open');
+        if (mobileNavBackdrop) mobileNavBackdrop.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    if (mobileMenuOpenBtn) mobileMenuOpenBtn.addEventListener('click', openMobileNav);
+    if (mobileNavCloseBtn) mobileNavCloseBtn.addEventListener('click', closeMobileNav);
+    if (mobileNavBackdrop) mobileNavBackdrop.addEventListener('click', closeMobileNav);
+
+    if (mobileBulkBtn) {
+        mobileBulkBtn.addEventListener('click', () => {
+            closeMobileNav();
+            openBulkModal();
+        });
+    }
+
+    document.querySelectorAll('.mobile-link[data-category]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const cat = link.getAttribute('data-category');
+            closeMobileNav();
+            if (cat) applyCategoryFilter(cat);
+        });
+    });
+
+    // Global Helpers for Mobile Bottom Nav
+    window.kalashFocusSearch = function () {
+        const prodSearch = document.getElementById('productSearch');
+        const shopSec = document.getElementById('shop');
+        if (shopSec) {
+            shopSec.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (prodSearch) {
+            setTimeout(() => prodSearch.focus(), 300);
+        }
+    };
+
+    window.kalashToast = showToast;
 
     // 13. INITIAL BOOTSTRAP
     // ----------------------------------------------------------------------

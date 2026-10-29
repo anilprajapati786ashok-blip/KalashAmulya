@@ -1,6 +1,6 @@
 @model IEnumerable<KalashAmulya.Models.AdminProductItem>
 @{
-    ViewData["Title"] = "Kalash Amulya - Pure Goodness Since Heritage";
+    ViewData["Title"] = "Cherubic Amulya - Pure Goodness Since Heritage";
     Layout = "_Layout";
 
     var allProducts = Model?.ToList() ?? new List<KalashAmulya.Models.AdminProductItem>();
@@ -116,7 +116,7 @@
                             <div class="amulya-jar-cap"></div>
                             <div class="amulya-jar-neck"></div>
                             <div class="amulya-jar-body">
-                                <img class="amulya-jar-fill" src="/images/cashew_bowl.png" alt="Kalash Amulya Royal Jumbo Cashews" loading="eager" />
+                                <img class="amulya-jar-fill" src="/images/cashew_bowl.png" alt="Cherubic Amulya Royal Jumbo Cashews" loading="eager" />
                                 <div class="amulya-jar-glare"></div>
                                 <div class="amulya-jar-sticker">
                                     <span class="st-brand">AMULYA</span>
@@ -319,62 +319,38 @@
                 <div class="bestsellers-grid">
             @foreach (var prod in bestsellersList)
             {
-                <div class="roopak-product-card" data-product-id="@prod.Id">
-                    <div class="ribbon-tag">@prod.Tag</div>
+                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category">
+                    @if (prod.Tag?.ToUpper().Contains("POPULAR") == true || prod.Tag?.ToUpper().Contains("BESTSELLER") == true || prod.Tag?.ToUpper().Contains("ROYAL") == true) { <div class="card-ribbon-popular">Most Popular</div> }
                     <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
                         <div class="amulya-jar-showcase">
                             <div class="amulya-jar-cap"></div>
                             <div class="amulya-jar-neck"></div>
                             <div class="amulya-jar-body">
-                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" />
+                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" onerror="this.src='/images/cashew.png'" />
                                 <div class="amulya-jar-glare"></div>
                                 <div class="amulya-jar-sticker">
                                     <span class="st-brand">AMULYA</span>
                                     <span class="st-name">@prod.Name.ToUpperInvariant()</span>
-                                    <span class="st-pure">100% PURE &bull; FSSAI GRADE</span>
                                 </div>
                             </div>
                             <div class="amulya-jar-shadow"></div>
                         </div>
-                        <span class="quick-view-badge">Quick View</span>
                     </div>
                     <div class="product-details-box">
-                        <div class="product-rating-row">
-                            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                            @if (prod.Stock <= 0)
-                            {
-                                <span class="stock-indicator-badge stock-badge-out">Out of Stock</span>
-                            }
-                            else if (prod.Stock <= 20)
-                            {
-                                <span class="stock-indicator-badge stock-badge-low">Only @prod.Stock left</span>
-                            }
-                            else
-                            {
-                                <span class="review-count">(@prod.Stock in stock)</span>
-                            }
-                        </div>
-                        <span class="product-cat-weight">@prod.Category &bull; @prod.Weight</span>
                         <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
-                        <p class="product-brief">@prod.Description</p>
-                        <div class="product-pricing-row">
-                            <div class="price-stack">
-                                <span class="current-price">&#8377;@prod.Price</span>
-                                <span class="mrp-strikethrough">&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</span>
-                            </div>
-                            @if (prod.Stock > 0)
-                            {
-                                <button type="button" class="add-to-cart-pill" onclick="window.kalashAddToCart(@prod.Id)">
-                                    <span>+ ADD TO CART</span>
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="button" class="add-to-cart-pill out-of-stock-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
-                                    <span>OUT OF STOCK</span>
-                                </button>
-                            }
-                        </div>
+                        <div class="product-price-tag">&#8377;@prod.Price.ToString("0.00")</div>
+                        @if (prod.Stock > 0)
+                        {
+                            <button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(@prod.Id)">
+                                ADD TO CART
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn-outline-add btn-out-of-stock" disabled>
+                                OUT OF STOCK
+                            </button>
+                        }
                     </div>
                 </div>
             }
@@ -544,68 +520,44 @@
         <div class="section-title-wrap">
             <span class="roopak-eyebrow">AUTHENTIC DAILY NUTRITION</span>
             <h2 class="roopak-section-title">Wholesome Grains &amp; <em>Certified Unpolished Pulses</em></h2>
-            <p class="section-subtext">Commercial supermarket pulses lose up to 40% of their aleurone protein layer during chemical polishing. Kalash Amulya brings you unadulterated, field-fresh staples in airtight jars.</p>
+            <p class="section-subtext">Commercial supermarket pulses lose up to 40% of their aleurone protein layer during chemical polishing. Cherubic Amulya brings you unadulterated, field-fresh staples in airtight jars.</p>
         </div>
 
         <div class="bestsellers-grid staples-4-grid">
             @foreach (var prod in staplesList)
             {
-                <div class="roopak-product-card" data-product-id="@prod.Id">
-                    <div class="ribbon-tag seed-tag">@prod.Tag</div>
+                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category">
+                    @if (prod.Tag?.ToUpper().Contains("POPULAR") == true || prod.Tag?.ToUpper().Contains("BESTSELLER") == true || prod.Tag?.ToUpper().Contains("ROYAL") == true) { <div class="card-ribbon-popular">Most Popular</div> }
                     <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
                         <div class="amulya-jar-showcase">
                             <div class="amulya-jar-cap"></div>
                             <div class="amulya-jar-neck"></div>
                             <div class="amulya-jar-body">
-                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" />
+                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" onerror="this.src='/images/cashew.png'" />
                                 <div class="amulya-jar-glare"></div>
                                 <div class="amulya-jar-sticker">
                                     <span class="st-brand">AMULYA</span>
                                     <span class="st-name">@prod.Name.ToUpperInvariant()</span>
-                                    <span class="st-pure">100% PURE &bull; RAW &amp; PURE</span>
                                 </div>
                             </div>
                             <div class="amulya-jar-shadow"></div>
                         </div>
-                        <span class="quick-view-badge">Quick View</span>
                     </div>
                     <div class="product-details-box">
-                        <div class="product-rating-row">
-                            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                            @if (prod.Stock <= 0)
-                            {
-                                <span class="stock-indicator-badge stock-badge-out">Out of Stock</span>
-                            }
-                            else if (prod.Stock <= 20)
-                            {
-                                <span class="stock-indicator-badge stock-badge-low">Only @prod.Stock left</span>
-                            }
-                            else
-                            {
-                                <span class="review-count">(@prod.Stock in stock)</span>
-                            }
-                        </div>
-                        <span class="product-cat-weight">@prod.Category &bull; @prod.Weight</span>
                         <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
-                        <p class="product-brief">@prod.Description</p>
-                        <div class="product-pricing-row">
-                            <div class="price-stack">
-                                <span class="current-price">&#8377;@prod.Price</span>
-                                <span class="mrp-strikethrough">&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</span>
-                            </div>
-                            @if (prod.Stock > 0)
-                            {
-                                <button type="button" class="add-to-cart-pill" onclick="window.kalashAddToCart(@prod.Id)">
-                                    <span>+ ADD TO CART</span>
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="button" class="add-to-cart-pill out-of-stock-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
-                                    <span>OUT OF STOCK</span>
-                                </button>
-                            }
-                        </div>
+                        <div class="product-price-tag">&#8377;@prod.Price.ToString("0.00")</div>
+                        @if (prod.Stock > 0)
+                        {
+                            <button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(@prod.Id)">
+                                ADD TO CART
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn-outline-add btn-out-of-stock" disabled>
+                                OUT OF STOCK
+                            </button>
+                        }
                     </div>
                 </div>
             }
@@ -627,62 +579,38 @@
         <div class="bestsellers-grid staples-4-grid">
             @foreach (var prod in seedsList)
             {
-                <div class="roopak-product-card" data-product-id="@prod.Id">
-                    <div class="ribbon-tag seed-tag">@prod.Tag</div>
+                <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category">
+                    @if (prod.Tag?.ToUpper().Contains("POPULAR") == true || prod.Tag?.ToUpper().Contains("BESTSELLER") == true || prod.Tag?.ToUpper().Contains("ROYAL") == true) { <div class="card-ribbon-popular">Most Popular</div> }
                     <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
                         <div class="amulya-jar-showcase">
                             <div class="amulya-jar-cap"></div>
                             <div class="amulya-jar-neck"></div>
                             <div class="amulya-jar-body">
-                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" />
+                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" onerror="this.src='/images/cashew.png'" />
                                 <div class="amulya-jar-glare"></div>
                                 <div class="amulya-jar-sticker">
                                     <span class="st-brand">AMULYA</span>
                                     <span class="st-name">@prod.Name.ToUpperInvariant()</span>
-                                    <span class="st-pure">100% PURE &bull; SUPERFOOD</span>
                                 </div>
                             </div>
                             <div class="amulya-jar-shadow"></div>
                         </div>
-                        <span class="quick-view-badge">Quick View</span>
                     </div>
                     <div class="product-details-box">
-                        <div class="product-rating-row">
-                            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                            @if (prod.Stock <= 0)
-                            {
-                                <span class="stock-indicator-badge stock-badge-out">Out of Stock</span>
-                            }
-                            else if (prod.Stock <= 20)
-                            {
-                                <span class="stock-indicator-badge stock-badge-low">Only @prod.Stock left</span>
-                            }
-                            else
-                            {
-                                <span class="review-count">(@prod.Stock in stock)</span>
-                            }
-                        </div>
-                        <span class="product-cat-weight">@prod.Category &bull; @prod.Weight</span>
                         <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
-                        <p class="product-brief">@prod.Description</p>
-                        <div class="product-pricing-row">
-                            <div class="price-stack">
-                                <span class="current-price">&#8377;@prod.Price</span>
-                                <span class="mrp-strikethrough">&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</span>
-                            </div>
-                            @if (prod.Stock > 0)
-                            {
-                                <button type="button" class="add-to-cart-pill" onclick="window.kalashAddToCart(@prod.Id)">
-                                    <span>+ ADD TO CART</span>
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="button" class="add-to-cart-pill out-of-stock-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
-                                    <span>OUT OF STOCK</span>
-                                </button>
-                            }
-                        </div>
+                        <div class="product-price-tag">&#8377;@prod.Price.ToString("0.00")</div>
+                        @if (prod.Stock > 0)
+                        {
+                            <button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(@prod.Id)">
+                                ADD TO CART
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn-outline-add btn-out-of-stock" disabled>
+                                OUT OF STOCK
+                            </button>
+                        }
                     </div>
                 </div>
             }
@@ -974,7 +902,7 @@
         <div class="seo-card-wrap">
             <div class="section-title-wrap">
                 <span class="roopak-eyebrow">FOOD PURITY SCIENCE</span>
-                <h2 class="roopak-section-title">The Kalash Amulya Heritage: <em>Purity, Authenticity &amp; Everyday Wellness</em></h2>
+                <h2 class="roopak-section-title">The Cherubic Amulya Heritage: <em>Purity, Authenticity &amp; Everyday Wellness</em></h2>
                 <p class="section-subtext">Everything you need to understand about certified unpolished staples, direct sourcing, and natural jar food preservation.</p>
             </div>
 
@@ -983,7 +911,7 @@
                 <div class="seo-column">
                     <h3 class="seo-subheading"><u>Why Choose Direct-Sourced Dry Fruits &amp; Certified Staples?</u></h3>
                     <p class="seo-intro-p">
-                        Commercial bulk dry fruits are frequently treated with sulphur dioxide fumigation to artificially prolong shelf life and mask aging oils. Kalash Amulya bypasses multi-tier intermediaries to bring you whole, living kernels straight from source.
+                        Commercial bulk dry fruits are frequently treated with sulphur dioxide fumigation to artificially prolong shelf life and mask aging oils. Cherubic Amulya bypasses multi-tier intermediaries to bring you whole, living kernels straight from source.
                     </p>
                     <ul class="seo-bullet-list">
                         <li><span class="arrow-bullet">&#10148;</span> <strong>Zero Sulphur Fumigation:</strong> Preserves natural sweetness and prevents asthmatic reactions caused by industrial preservatives.</li>
@@ -1039,7 +967,7 @@
                 <!-- FAQ Item 1 -->
                 <div class="faq-accordion-card">
                     <button type="button" class="faq-question-btn" aria-expanded="false">
-                        <span>How does Kalash Amulya ensure dry fruit freshness and zero adulteration?</span>
+                        <span>How does Cherubic Amulya ensure dry fruit freshness and zero adulteration?</span>
                         <span class="faq-indicator">+</span>
                     </button>
                     <div class="faq-answer-panel" hidden>
@@ -1065,7 +993,7 @@
                         <span class="faq-indicator">+</span>
                     </button>
                     <div class="faq-answer-panel" hidden>
-                        <p>Yes. Kalash Amulya operates strictly under Central FSSAI License No. 12721055000341. Our packaging and storage facilities in 173-B, Dada Nagar, Kanpur adhere to ISO 22000 and Good Manufacturing Practice (GMP) food safety standards.</p>
+                        <p>Yes. Cherubic Amulya operates strictly under Central FSSAI License No. 12721055000341. Our packaging and storage facilities in 173-B, Dada Nagar, Kanpur adhere to ISO 22000 and Good Manufacturing Practice (GMP) food safety standards.</p>
                     </div>
                 </div>
             </div>
@@ -1090,7 +1018,7 @@
                         <span class="faq-indicator">+</span>
                     </button>
                     <div class="faq-answer-panel" hidden>
-                        <p>Supermarket pulses are subjected to oil, talc stone, and water polishes to achieve an artificial gloss. This strips the vital aleurone skin. Kalash Amulya lentils retain their natural, matte, rustic appearance, ensuring full protein, fiber, and earthy flavour.</p>
+                        <p>Supermarket pulses are subjected to oil, talc stone, and water polishes to achieve an artificial gloss. This strips the vital aleurone skin. Cherubic Amulya lentils retain their natural, matte, rustic appearance, ensuring full protein, fiber, and earthy flavour.</p>
                     </div>
                 </div>
 
@@ -1142,61 +1070,37 @@
             @foreach (var prod in allProducts)
             {
                 <div class="roopak-product-card" data-product-id="@prod.Id" data-category="@prod.Category">
-                    <div class="ribbon-tag">@prod.Tag</div>
+                    @if (prod.Tag?.ToUpper().Contains("POPULAR") == true || prod.Tag?.ToUpper().Contains("BESTSELLER") == true || prod.Tag?.ToUpper().Contains("ROYAL") == true) { <div class="card-ribbon-popular">Most Popular</div> }
                     <div class="product-thumb-box" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">
                         <div class="amulya-jar-showcase">
                             <div class="amulya-jar-cap"></div>
                             <div class="amulya-jar-neck"></div>
                             <div class="amulya-jar-body">
-                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" onerror="this.src='/images/logo.png'" />
+                                <img class="amulya-jar-fill" src="@prod.ImageUrl" alt="@prod.Name" loading="lazy" onerror="this.src='/images/cashew.png'" />
                                 <div class="amulya-jar-glare"></div>
                                 <div class="amulya-jar-sticker">
                                     <span class="st-brand">AMULYA</span>
                                     <span class="st-name">@prod.Name.ToUpperInvariant()</span>
-                                    <span class="st-pure">100% PURE &bull; FSSAI GRADE</span>
                                 </div>
                             </div>
                             <div class="amulya-jar-shadow"></div>
                         </div>
-                        <span class="quick-view-badge">Quick View</span>
                     </div>
                     <div class="product-details-box">
-                        <div class="product-rating-row">
-                            <span class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
-                            @if (prod.Stock <= 0)
-                            {
-                                <span class="stock-indicator-badge stock-badge-out">Out of Stock</span>
-                            }
-                            else if (prod.Stock <= 20)
-                            {
-                                <span class="stock-indicator-badge stock-badge-low">Only @prod.Stock left</span>
-                            }
-                            else
-                            {
-                                <span class="review-count">(@prod.Stock in stock)</span>
-                            }
-                        </div>
-                        <span class="product-cat-weight">@prod.Category &bull; @prod.Weight</span>
                         <h3 class="product-name" onclick="window.kalashOpenModal && window.kalashOpenModal(@prod.Id)">@prod.Name</h3>
-                        <p class="product-brief">@prod.Description</p>
-                        <div class="product-pricing-row">
-                            <div class="price-stack">
-                                <span class="current-price">&#8377;@prod.Price</span>
-                                <span class="mrp-strikethrough">&#8377;@(prod.Mrp > 0 ? prod.Mrp : Math.Round(prod.Price * 1.25m))</span>
-                            </div>
-                            @if (prod.Stock > 0)
-                            {
-                                <button type="button" class="add-to-cart-pill" onclick="window.kalashAddToCart(@prod.Id)">
-                                    <span>+ ADD TO CART</span>
-                                </button>
-                            }
-                            else
-                            {
-                                <button type="button" class="add-to-cart-pill out-of-stock-btn" disabled style="opacity: 0.6; cursor: not-allowed;">
-                                    <span>OUT OF STOCK</span>
-                                </button>
-                            }
-                        </div>
+                        <div class="product-price-tag">&#8377;@prod.Price.ToString("0.00")</div>
+                        @if (prod.Stock > 0)
+                        {
+                            <button type="button" class="btn-outline-add" onclick="window.kalashAddToCart(@prod.Id)">
+                                ADD TO CART
+                            </button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn-outline-add btn-out-of-stock" disabled>
+                                OUT OF STOCK
+                            </button>
+                        }
                     </div>
                 </div>
             }

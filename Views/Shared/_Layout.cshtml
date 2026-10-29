@@ -1,9 +1,10 @@
+@using Microsoft.AspNetCore.Identity
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Kalash Amulya | Heritage Staples & Dry Fruits</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>@ViewData["Title"] - Cherubic Amulya | Heritage Staples &amp; Dry Fruits</title>
     
     <!-- Google Fonts: Plus Jakarta Sans & Playfair Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,26 +20,49 @@
     <!-- ==================== TIER 1: DARK NAVY ANNOUNCEMENT BAR ==================== -->
     <aside class="top-announcement-bar" role="region" aria-label="Announcement">
         <div class="announcement-content">
-            <span class="announcement-star">★</span>
+            <span class="announcement-star">&#9733;</span>
             <span class="announcement-text">Pure Goodness Since Heritage &bull; Certified Organic &amp; Unpolished Staples &bull; Fast All-India &amp; Kanpur Local Delivery</span>
-            <span class="announcement-star">★</span>
+            <span class="announcement-star">&#9733;</span>
         </div>
     </aside>
 
     <!-- ==================== TIER 2: CLEAN WHITE MAIN HEADER ==================== -->
     <header class="main-store-header">
         <div class="header-container">
-            <!-- Brand Logo & Subtitle -->
-            <a href="/" class="brand-identity" aria-label="Kalash Amulya Home">
-                <img src="/images/logo.png" alt="Kalash Amulya Emblem" class="brand-logo-img" onerror="this.style.display='none'">
+            <!-- Mobile Hamburger Left (< 768px) -->
+            <button type="button" class="mobile-hamburger-btn" id="mobileMenuOpen" aria-label="Open Navigation Menu">
+                <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round">
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <!-- Brand Identity (Centered on mobile, Left on desktop) -->
+            <a href="/" class="brand-identity" aria-label="Cherubic Amulya Home">
+                <div class="cherubic-brand-emblem">
+                    <svg viewBox="0 0 36 28" width="30" height="24" fill="none">
+                        <path d="M18 2L22 11L31 6L27 24H9L5 6L14 11L18 2Z" fill="url(#crownGrad)" stroke="#b47b45" stroke-width="1.3" stroke-linejoin="round"/>
+                        <circle cx="18" cy="2" r="1.8" fill="#d4af37"/>
+                        <circle cx="5" cy="6" r="1.5" fill="#d4af37"/>
+                        <circle cx="31" cy="6" r="1.5" fill="#d4af37"/>
+                        <defs>
+                            <linearGradient id="crownGrad" x1="5" y1="2" x2="31" y2="24" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#f3d08c"/>
+                                <stop offset="0.6" stop-color="#b47b45"/>
+                                <stop offset="1" stop-color="#7a4e1d"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
                 <div class="brand-text-block">
-                    <span class="brand-title">KALASH AMULYA</span>
-                    <span class="brand-subtitle">Goodness for Everyday Living</span>
+                    <span class="brand-title">CHERUBIC AMULYA</span>
+                    <span class="brand-subtitle desktop-only">Pure Goodness Since Heritage</span>
                 </div>
             </a>
 
-            <!-- Centered Pill Search Bar -->
-            <div class="header-search-wrapper">
+            <!-- Centered Pill Search Bar (Desktop Only) -->
+            <div class="header-search-wrapper desktop-only">
                 <form class="header-search-form" id="globalSearchForm" onsubmit="event.preventDefault();">
                     <span class="search-icon" aria-hidden="true">&#9906;</span>
                     <input type="search" id="globalSearchInput" class="header-search-input" placeholder="Search dry fruits, unpolished pulses, seeds, murabba..." aria-label="Search products" autocomplete="off" />
@@ -48,16 +72,16 @@
 
             <!-- Right Utility Actions -->
             <div class="header-utility-actions">
-                <!-- Bulk Enquiry Pill Button -->
-                <button type="button" class="utility-pill-btn bulk-btn" id="openBulkModalBtn">
+                <!-- Bulk Enquiry Pill Button (Desktop Only) -->
+                <button type="button" class="utility-pill-btn bulk-btn desktop-only" id="openBulkModalBtn">
                     <span class="pill-dot"></span>
                     <span>Bulk Enquiry</span>
                 </button>
 
-                <!-- My Account Link -->
+                <!-- My Account Link (Desktop Only) -->
                 @if (User.Identity?.IsAuthenticated == true)
                 {
-                    <a href="/Account/Profile" class="utility-account-link auth-active" title="My Profile (@User.Identity.Name)">
+                    <a href="/Account/Profile" class="utility-account-link auth-active desktop-only" title="My Profile (@User.Identity.Name)">
                         <svg class="utility-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
@@ -67,7 +91,7 @@
                 }
                 else
                 {
-                    <a href="/Account/Login" class="utility-account-link" title="Customer Login / Register">
+                    <a href="/Account/Login" class="utility-account-link desktop-only" title="Customer Login / Register">
                         <svg class="utility-icon" viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
@@ -83,15 +107,8 @@
                         <line x1="3" y1="6" x2="21" y2="6"></line>
                         <path d="M16 10a4 4 0 0 1-8 0"></path>
                     </svg>
-                    <span class="cart-label">Bag</span>
+                    <span class="cart-label desktop-only">Bag</span>
                     <span class="cart-badge-pill" id="cartCount">0</span>
-                </button>
-
-                <!-- Mobile Menu Hamburger -->
-                <button type="button" class="mobile-menu-trigger" id="menuToggle" aria-label="Toggle navigation menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
                 </button>
             </div>
         </div>
@@ -114,22 +131,66 @@
         </div>
     </nav>
 
+    <!-- ==================== MOBILE SLIDING NAVIGATION DRAWER ==================== -->
+    <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+    <aside class="mobile-nav-drawer" id="mobileNavDrawer" aria-label="Mobile Navigation">
+        <div class="mobile-nav-head">
+            <div class="mobile-nav-brand">
+                <span class="crown-icon">👑</span>
+                <strong>CHERUBIC AMULYA</strong>
+            </div>
+            <button type="button" class="close-mobile-nav" id="mobileNavClose" aria-label="Close menu">&times;</button>
+        </div>
+        <div class="mobile-nav-body">
+            <ul class="mobile-links-list">
+                <li><a href="/" class="mobile-link"><span class="m-icon">🏠</span> Home</a></li>
+                <li><a href="/Home/About" class="mobile-link"><span class="m-icon">📖</span> About Us</a></li>
+                <li><a href="/#dry-fruits" class="mobile-link" data-category="Dry Fruits"><span class="m-icon">🥜</span> Dry Fruits</a></li>
+                <li><a href="/#seeds" class="mobile-link" data-category="Seeds"><span class="m-icon">🌱</span> Seeds</a></li>
+                <li><a href="/#salts" class="mobile-link" data-category="Salts & Seasonings"><span class="m-icon">🧂</span> Salts &amp; Seasonings</a></li>
+                <li><a href="/#preserves" class="mobile-link" data-category="Preserves & Sweets"><span class="m-icon">🍯</span> Preserves &amp; Sweets</a></li>
+                <li><a href="/#grains" class="mobile-link" data-category="Grains & Pulses"><span class="m-icon">🌾</span> Grains &amp; Pulses</a></li>
+                <li><a href="/#recipes" class="mobile-link"><span class="m-icon">🍲</span> Traditional Recipes</a></li>
+                <li><a href="/Home/Contact" class="mobile-link"><span class="m-icon">📍</span> Contact &amp; Depot</a></li>
+                <li><a href="javascript:void(0)" class="mobile-link" id="mobileBulkBtn"><span class="m-icon">📦</span> Bulk Enquiry</a></li>
+            </ul>
+            <div class="mobile-nav-auth">
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a href="/Account/Profile" class="mobile-auth-btn">👤 My Profile &amp; Orders</a>
+                    <a href="/Account/Logout" class="mobile-auth-btn-outline">Sign Out</a>
+                }
+                else
+                {
+                    <a href="/Account/Login" class="mobile-auth-btn">Sign In / Register</a>
+                }
+            </div>
+        </div>
+    </aside>
+
     <!-- ==================== MAIN CONTENT BODY ==================== -->
     <main id="mainContent" role="main">
         @RenderBody()
     </main>
 
-    <!-- ==================== ROOPAK STORES 4-COLUMN MODERN FOOTER ==================== -->
+    <!-- ==================== 4-COLUMN MODERN FOOTER ==================== -->
     <footer class="roopak-footer">
         <div class="footer-container">
             <div class="footer-grid">
                 <!-- Col 1: Get in Touch -->
                 <div class="footer-col footer-col-contact">
                     <div class="footer-brand">
-                        <img src="/images/logo-inverted.png" alt="Kalash Amulya" class="footer-logo-img" onerror="this.src='/images/logo.png'">
+                        <div class="cherubic-brand-emblem footer-emblem">
+                            <svg viewBox="0 0 36 28" width="34" height="26" fill="none">
+                                <path d="M18 2L22 11L31 6L27 24H9L5 6L14 11L18 2Z" fill="#d4af37" stroke="#b47b45" stroke-width="1.3" stroke-linejoin="round"/>
+                                <circle cx="18" cy="2" r="1.8" fill="#ffffff"/>
+                                <circle cx="5" cy="6" r="1.5" fill="#ffffff"/>
+                                <circle cx="31" cy="6" r="1.5" fill="#ffffff"/>
+                            </svg>
+                        </div>
                         <div>
-                            <span class="footer-brand-title">KALASH AMULYA</span>
-                            <span class="footer-brand-tag">Goodness for Everyday Living</span>
+                            <span class="footer-brand-title">CHERUBIC AMULYA</span>
+                            <span class="footer-brand-tag">Pure Goodness Since Heritage</span>
                         </div>
                     </div>
                     <p class="footer-description">
@@ -142,7 +203,7 @@
                         </div>
                         <div class="contact-line">
                             <span class="contact-icon">&#9993;</span>
-                            <span><strong>Support:</strong> care@kalashamulya.com</span>
+                            <span><strong>Support:</strong> care@cherubicamulya.com</span>
                         </div>
                         <div class="contact-line">
                             <span class="contact-icon">&#9742;</span>
@@ -225,24 +286,68 @@
             <div class="footer-bottom-bar">
                 <div class="footer-bottom-content">
                     <p class="copyright-text">
-                        &copy; 2026 Kalash Amulya Naturals Pvt. Ltd. All Rights Reserved. Kanpur, Uttar Pradesh, India.
+                        &copy; 2026 Cherubic Amulya Naturals Pvt. Ltd. All Rights Reserved. Kanpur, Uttar Pradesh, India.
                     </p>
                     <div class="footer-badges-list">
-                        <span>&#10003; 100% Unadulterated</span>
-                        <span>&#10003; FSSAI Standard</span>
-                        <span>&#10003; Secure Demo Checkout</span>
+                        <span>FSSAI Certified</span>
+                        <span>&bull;</span>
+                        <span>100% Unpolished</span>
+                        <span>&bull;</span>
+                        <span>Recyclable Food-Grade Glass Jars</span>
                     </div>
                 </div>
             </div>
         </div>
     </footer>
 
+    <!-- ==================== FIXED MOBILE BOTTOM APP NAVIGATION ==================== -->
+    <nav class="mobile-bottom-nav" aria-label="Mobile App Navigation">
+        <a href="/" class="bottom-nav-item active" id="bnavShop">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            <span>Shop</span>
+        </a>
+        <a href="javascript:void(0)" class="bottom-nav-item" id="bnavWishlist" onclick="if(window.kalashToast) window.kalashToast('Wishlist: Tap any heart to save Amulya harvests!');">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span>Wishlist</span>
+        </a>
+        <button type="button" class="bottom-nav-item bottom-nav-cart" id="bnavCart" onclick="if(window.kalashOpenCart) window.kalashOpenCart();">
+            <div class="bottom-cart-icon-wrap">
+                <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <span class="mobile-bottom-cart-badge" id="bottomCartCount">0</span>
+            </div>
+            <span>Cart</span>
+        </button>
+        <a href="/Account/Profile" class="bottom-nav-item" id="bnavAccount">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Account</span>
+        </a>
+        <button type="button" class="bottom-nav-item" id="bnavSearch" onclick="if(window.kalashFocusSearch) window.kalashFocusSearch();">
+            <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <span>Search</span>
+        </button>
+    </nav>
+
     <!-- ==================== CART DRAWER ==================== -->
     <div class="cart-backdrop" id="cartBackdrop"></div>
     <aside class="cart-drawer" id="cartDrawer" aria-label="Shopping bag">
         <div class="cart-head">
             <div>
-                <p class="drawer-eyebrow">AMULYA PANTRY BAG</p>
+                <p class="drawer-eyebrow">CHERUBIC AMULYA BAG</p>
                 <h3 class="drawer-title">Your Bag <span id="drawerCount">(0)</span></h3>
             </div>
             <button id="closeCart" class="close-btn" aria-label="Close cart">&times;</button>
@@ -304,7 +409,7 @@
             <button type="button" class="close-btn checkout-close" id="closeCheckout" aria-label="Close checkout">&times;</button>
 
             <div id="checkoutStepForm">
-                <p class="checkout-eyebrow">SECURE CHECKOUT DEMO</p>
+                <p class="checkout-eyebrow">SECURE CHECKOUT</p>
                 <h2 id="checkoutTitle" class="checkout-main-title">Complete Your Order</h2>
                 <p class="checkout-intro">Enter your delivery details below to simulate an order placement.</p>
 
@@ -346,11 +451,11 @@
 
                         <label class="payment-option">
                             <input type="radio" name="paymentMethod" value="UPI">
-                            <span><strong>Instant UPI / NetBanking (Demo)</strong><small>Simulated interface &bull; No actual money is debited</small></span>
+                            <span><strong>Instant UPI / NetBanking</strong><small>Simulated payment confirmation</small></span>
                         </label>
 
                         <button class="btn btn-dark checkout-place" type="submit">Place Order &rarr;</button>
-                        <p class="checkout-disclaimer">Frontend demonstration only. This form simulates order processing without actual backend persistence.</p>
+                        <p class="checkout-disclaimer">Kanpur local express and All-India fast courier dispatch.</p>
                     </form>
 
                     <aside class="checkout-summary">
@@ -366,14 +471,14 @@
 
             <div id="checkoutSuccess" hidden class="checkout-success">
                 <div class="checkout-success-icon">&#10003;</div>
-                <p class="checkout-eyebrow">ORDER CONFIRMATION PREVIEW</p>
+                <p class="checkout-eyebrow">ORDER CONFIRMATION</p>
                 <h2 class="success-title">Order Placed Successfully!</h2>
                 <p id="checkoutSuccessMessage" class="success-message"></p>
                 <div class="order-id-box">
-                    <span>Demo Order Reference:</span>
+                    <span>Order Reference:</span>
                     <strong id="checkoutOrderNumber"></strong>
                 </div>
-                <p class="checkout-disclaimer">This is a demonstration order simulation. A confirmation SMS/Email would be dispatched in a live production environment.</p>
+                <p class="checkout-disclaimer">Your order has been recorded in our Kanpur dispatch center.</p>
                 <button type="button" class="btn btn-dark" id="doneCheckout">Continue Shopping &rarr;</button>
             </div>
         </section>
@@ -417,24 +522,6 @@
                 <button type="submit" class="btn btn-dark bulk-submit-btn">Submit Bulk Request &rarr;</button>
                 <p id="bulkSuccessMessage" class="bulk-success-text" hidden>Thank you! Your bulk inquiry has been submitted. Our commercial desk will contact you within 2 hours.</p>
             </form>
-        </div>
-    </div>
-
-    <!-- ==================== VIDEO REELS POPUP MODAL ==================== -->
-    <div class="video-modal" id="videoModal">
-        <div class="modal-backdrop" id="videoBackdrop"></div>
-        <div class="modal-card video-card-modal">
-            <button class="close-btn modal-close" id="closeVideoModal" aria-label="Close video modal">&times;</button>
-            <div class="video-player-container">
-                <div class="video-placeholder-art" id="videoPlaceholder">
-                    <div class="video-play-ring">
-                        <span>&#9654;</span>
-                    </div>
-                    <h3 id="videoModalTitle">Video Presentation</h3>
-                    <p id="videoModalDesc">Kalash Amulya Heritage Quality Sourcing</p>
-                    <span class="video-live-badge">&#9679; Heritage Footage</span>
-                </div>
-            </div>
         </div>
     </div>
 
